@@ -1,0 +1,403 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		531C5683152F2F880044884C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5682152F2F880044884C /* Foundation.framework */; };
+		531C5689152F2F880044884C /* AZSocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531C5688152F2F880044884C /* AZSocketIO.m */; };
+		531C5691152F2F880044884C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5690152F2F880044884C /* SenTestingKit.framework */; };
+		531C5693152F2F880044884C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5692152F2F880044884C /* UIKit.framework */; };
+		531C5694152F2F880044884C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5682152F2F880044884C /* Foundation.framework */; };
+		531C5697152F2F880044884C /* libAZSocketIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C567F152F2F880044884C /* libAZSocketIO.a */; };
+		531C569D152F2F880044884C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 531C569B152F2F880044884C /* InfoPlist.strings */; };
+		531C56A0152F2F880044884C /* AZSocketIOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 531C569F152F2F880044884C /* AZSocketIOTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		531C5695152F2F880044884C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 531C5676152F2F880044884C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 531C567E152F2F880044884C;
+			remoteInfo = AZSocketIO;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		531C567F152F2F880044884C /* libAZSocketIO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAZSocketIO.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		531C5682152F2F880044884C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		531C5686152F2F880044884C /* AZSocketIO-Prefix.pch */ = {isa = PBXFileReference; path = "AZSocketIO-Prefix.pch"; sourceTree = "<group>"; };
+		531C5687152F2F880044884C /* AZSocketIO.h */ = {isa = PBXFileReference; path = AZSocketIO.h; sourceTree = "<group>"; };
+		531C5688152F2F880044884C /* AZSocketIO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AZSocketIO.m; sourceTree = "<group>"; };
+		531C568F152F2F880044884C /* AZSocketIOTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AZSocketIOTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		531C5690152F2F880044884C /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		531C5692152F2F880044884C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		531C569A152F2F880044884C /* AZSocketIOTests-Info.plist */ = {isa = PBXFileReference; path = "AZSocketIOTests-Info.plist"; sourceTree = "<group>"; };
+		531C569C152F2F880044884C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		531C569E152F2F880044884C /* AZSocketIOTests.h */ = {isa = PBXFileReference; path = AZSocketIOTests.h; sourceTree = "<group>"; };
+		531C569F152F2F880044884C /* AZSocketIOTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AZSocketIOTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		531C567C152F2F880044884C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531C5683152F2F880044884C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		531C568B152F2F880044884C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531C5691152F2F880044884C /* SenTestingKit.framework in Frameworks */,
+				531C5693152F2F880044884C /* UIKit.framework in Frameworks */,
+				531C5694152F2F880044884C /* Foundation.framework in Frameworks */,
+				531C5697152F2F880044884C /* libAZSocketIO.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		531C5674152F2F880044884C = {
+			isa = PBXGroup;
+			children = (
+				531C5684152F2F880044884C /* AZSocketIO */,
+				531C5698152F2F880044884C /* AZSocketIOTests */,
+				531C5681152F2F880044884C /* Frameworks */,
+				531C5680152F2F880044884C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		531C5680152F2F880044884C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				531C567F152F2F880044884C /* libAZSocketIO.a */,
+				531C568F152F2F880044884C /* AZSocketIOTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		531C5681152F2F880044884C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				531C5682152F2F880044884C /* Foundation.framework */,
+				531C5690152F2F880044884C /* SenTestingKit.framework */,
+				531C5692152F2F880044884C /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		531C5684152F2F880044884C /* AZSocketIO */ = {
+			isa = PBXGroup;
+			children = (
+				531C5687152F2F880044884C /* AZSocketIO.h */,
+				531C5688152F2F880044884C /* AZSocketIO.m */,
+				531C5685152F2F880044884C /* Supporting Files */,
+			);
+			path = AZSocketIO;
+			sourceTree = "<group>";
+		};
+		531C5685152F2F880044884C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				531C5686152F2F880044884C /* AZSocketIO-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		531C5698152F2F880044884C /* AZSocketIOTests */ = {
+			isa = PBXGroup;
+			children = (
+				531C569E152F2F880044884C /* AZSocketIOTests.h */,
+				531C569F152F2F880044884C /* AZSocketIOTests.m */,
+				531C5699152F2F880044884C /* Supporting Files */,
+			);
+			path = AZSocketIOTests;
+			sourceTree = "<group>";
+		};
+		531C5699152F2F880044884C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				531C569A152F2F880044884C /* AZSocketIOTests-Info.plist */,
+				531C569B152F2F880044884C /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		531C567D152F2F880044884C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		531C567E152F2F880044884C /* AZSocketIO */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 531C56A3152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIO" */;
+			buildPhases = (
+				531C567B152F2F880044884C /* Sources */,
+				531C567C152F2F880044884C /* Frameworks */,
+				531C567D152F2F880044884C /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AZSocketIO;
+			productName = AZSocketIO;
+			productReference = 531C567F152F2F880044884C /* libAZSocketIO.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		531C568E152F2F880044884C /* AZSocketIOTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 531C56A6152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIOTests" */;
+			buildPhases = (
+				531C568A152F2F880044884C /* Sources */,
+				531C568B152F2F880044884C /* Frameworks */,
+				531C568C152F2F880044884C /* Resources */,
+				531C568D152F2F880044884C /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				531C5696152F2F880044884C /* PBXTargetDependency */,
+			);
+			name = AZSocketIOTests;
+			productName = AZSocketIOTests;
+			productReference = 531C568F152F2F880044884C /* AZSocketIOTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		531C5676152F2F880044884C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = "Rally Software";
+			};
+			buildConfigurationList = 531C5679152F2F880044884C /* Build configuration list for PBXProject "AZSocketIO" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 531C5674152F2F880044884C;
+			productRefGroup = 531C5680152F2F880044884C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				531C567E152F2F880044884C /* AZSocketIO */,
+				531C568E152F2F880044884C /* AZSocketIOTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		531C568C152F2F880044884C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531C569D152F2F880044884C /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		531C568D152F2F880044884C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		531C567B152F2F880044884C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531C5689152F2F880044884C /* AZSocketIO.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		531C568A152F2F880044884C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531C56A0152F2F880044884C /* AZSocketIOTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		531C5696152F2F880044884C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 531C567E152F2F880044884C /* AZSocketIO */;
+			targetProxy = 531C5695152F2F880044884C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		531C569B152F2F880044884C /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				531C569C152F2F880044884C /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		531C56A1152F2F880044884C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		531C56A2152F2F880044884C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		531C56A4152F2F880044884C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AZSocketIO.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		531C56A5152F2F880044884C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/AZSocketIO.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		531C56A7152F2F880044884C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
+				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		531C56A8152F2F880044884C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
+				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		531C5679152F2F880044884C /* Build configuration list for PBXProject "AZSocketIO" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				531C56A1152F2F880044884C /* Debug */,
+				531C56A2152F2F880044884C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		531C56A3152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIO" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				531C56A4152F2F880044884C /* Debug */,
+				531C56A5152F2F880044884C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		531C56A6152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIOTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				531C56A7152F2F880044884C /* Debug */,
+				531C56A8152F2F880044884C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 531C5676152F2F880044884C /* Project object */;
+}
