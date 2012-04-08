@@ -16,4 +16,5 @@
 @property(nonatomic, strong)id data;
 
 - (id)initWithString:(NSString *)packetString;
+- (NSString *)encode;
 @end

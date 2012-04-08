@@ -16,4 +16,5 @@
 - (void)disconnect;
 - (void)send:(NSString*)msg;
 - (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate;
+- (BOOL)isConnected;
 @end

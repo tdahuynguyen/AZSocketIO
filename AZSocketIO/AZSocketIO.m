@@ -78,7 +78,36 @@
     }
 }
 
+- (void)send:(id)data error:(NSError *__autoreleasing *)error
+{
+    if (self.transport && [self.transport isConnected]) {
+        AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
+        
+        if (![data isKindOfClass:[NSString class]]) {
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                               options:0
+                                                                 error:error];
+            NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                         encoding:NSUTF8StringEncoding];
+            packet.data = jsonString;
+            packet.type = 4;
+        } else {
+            packet.data = data;
+            packet.type = 3;
+        }
+        
+        [self.transport send:[packet encode]];
+    } else {
+        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+        [errorDetail setValue:@"Not yet connected" forKey:NSLocalizedDescriptionKey];
+        *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+    }
+}
 
+- (void)emit:(NSString *)name args:(id)args
+{
+    
+}
 #pragma mark AZSocketIOTransportDelegate
 - (void)didReceiveMessage:(NSString *)message
 {

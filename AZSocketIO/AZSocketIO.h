@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "AZsocketIOTransportDelegate.h"
 
+#define AZDOMAIN @"AZSocketIO"
+
 typedef void (^MessageRecievedBlock)(id data);
 typedef void (^EventRecievedBlock)(NSString *eventName, id data);
 typedef void (^ConnectedBlock)();
@@ -27,4 +29,5 @@ typedef void (^DisconnectedBlock)();
 @property(nonatomic, copy)DisconnectedBlock disconnectedBlock;
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port;
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure;
+- (void)send:(id)data error:(NSError * __autoreleasing *)error;
 @end

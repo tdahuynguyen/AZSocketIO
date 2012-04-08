@@ -44,6 +44,11 @@
     return self;
 }
 
+- (NSString *)encode
+{
+    return [NSString stringWithFormat:@"%d:::%@", self.type, self.data];
+}
+
 + (NSRegularExpression *)regex
 {
     static NSRegularExpression *regex;

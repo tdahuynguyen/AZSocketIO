@@ -11,4 +11,5 @@
 
 @interface AZWebsocketTransport : NSObject <AZSocketIOTransport, SRWebSocketDelegate>
 @property(nonatomic, strong)SRWebSocket *websocket;
+@property(nonatomic, readonly, getter = isConnected)BOOL connected;
 @end
