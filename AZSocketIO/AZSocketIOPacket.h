@@ -8,6 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    DISCONNECT,
+    CONNECT,
+    HEARTBEAT,
+    MESSAGE,
+    JSON_MESSAGE,
+    EVENT,
+    ACK,
+    ERROR,
+    NOOP
+} MESSAGE_TYPE;
+
 @interface AZSocketIOPacket : NSObject
 @property(nonatomic, assign)int type;
 @property(nonatomic, strong)NSString *Id;

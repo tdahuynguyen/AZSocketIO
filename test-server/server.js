@@ -5,10 +5,10 @@ io.sockets.on('connection', function (socket) {
   socket.on('my other event', function (data) {
     console.log(data);
   });
-    setInterval(function() {
-	socket.emit("time", { date: new Date()});
-    }, 5000);
     socket.on('message', function(msg) {
 	socket.emit("Oh happy day.", msg);
+    });
+    socket.on('foo', function(msg) {
+	socket.emit('foo', msg);
     });
 });

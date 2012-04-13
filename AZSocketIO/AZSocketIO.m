@@ -79,23 +79,45 @@
 }
 
 - (void)send:(id)data error:(NSError *__autoreleasing *)error
+{        
+    AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
+    
+    if (![data isKindOfClass:[NSString class]]) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                           options:0
+                                                             error:error];
+        NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                     encoding:NSUTF8StringEncoding];
+        packet.data = jsonString;
+        packet.type = JSON_MESSAGE;
+    } else {
+        packet.data = data;
+        packet.type = MESSAGE;
+    }
+    
+    [self sendPacket:packet error:error];
+}
+
+- (void)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error
+{
+    AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
+    packet.type = EVENT;
+    
+    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
+                                                       options:0
+                                                         error:error];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData
+                                                 encoding:NSUTF8StringEncoding];
+    
+    packet.data = jsonString;
+    
+    [self sendPacket:packet error:error];
+}
+
+- (void)sendPacket:(AZSocketIOPacket *)packet error:(NSError * __autoreleasing *)error
 {
     if (self.transport && [self.transport isConnected]) {
-        AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
-        
-        if (![data isKindOfClass:[NSString class]]) {
-            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
-                                                               options:0
-                                                                 error:error];
-            NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                         encoding:NSUTF8StringEncoding];
-            packet.data = jsonString;
-            packet.type = 4;
-        } else {
-            packet.data = data;
-            packet.type = 3;
-        }
-        
         [self.transport send:[packet encode]];
     } else {
         NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
@@ -103,48 +125,43 @@
         *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
     }
 }
-
-- (void)emit:(NSString *)name args:(id)args
-{
-    
-}
 #pragma mark AZSocketIOTransportDelegate
 - (void)didReceiveMessage:(NSString *)message
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
     id outData;
     switch (packet.type) {
-        case 0: //Disconnect
+        case DISCONNECT:
             [self.transport disconnect];
             break;
-        case 1: //Connect
+        case CONNECT:
             if (self.connectionBlock) {
                 self.connectionBlock();
                 self.connectionBlock = nil;
             }
             break;
-        case 2: //Heartbeat
+        case HEARTBEAT:
             [self.transport send:message];
             break;
-        case 3: //Message
+        case MESSAGE:
             self.messageRecievedBlock(packet.data);
             break;
-        case 4: //JSON message
+        case JSON_MESSAGE:
             outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]        
                                                       options:NSJSONReadingMutableContainers 
                                                         error:nil];
             self.messageRecievedBlock(outData);
             break;
-        case 5: //Event
+        case EVENT:
             outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]        
                                                       options:NSJSONReadingMutableContainers 
                                                         error:nil];
             self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
             break;
-        case 6: //ACK
+        case ACK:
             NSLog(@"ACK");
             break;
-        case 7: //Error
+        case ERROR:
             NSLog(@"Error");
             break;
         default:

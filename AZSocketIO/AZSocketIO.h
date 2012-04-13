@@ -30,4 +30,5 @@ typedef void (^DisconnectedBlock)();
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port;
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure;
 - (void)send:(id)data error:(NSError * __autoreleasing *)error;
+- (void)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error;
 @end

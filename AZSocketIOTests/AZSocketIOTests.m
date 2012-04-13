@@ -60,6 +60,19 @@ describe(@"The socket", ^{
             [socket send:sent error:nil];
             [[expectFutureValue(recieved) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:sent];
         });
+        it(@"can emit an event and recieve the return val", ^{
+            __block NSString *name = @"foo";
+            __block NSArray *args = [NSArray arrayWithObject:@"bar"];
+            __block NSString *recievedName;
+            __block NSArray *recievedArgs;
+            socket.eventRecievedBlock = ^(NSString *_name, id _args) {
+                recievedName = _name;
+                recievedArgs = _args;
+            };
+            [socket emit:name args:args error:nil];
+            [[expectFutureValue(recievedName) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:name];
+            [[expectFutureValue(recievedArgs) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:args];
+        });
     });
 });
 SPEC_END
