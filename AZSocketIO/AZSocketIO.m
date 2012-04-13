@@ -93,7 +93,7 @@
 }
 
 #pragma mark data sending
-- (void)send:(id)data error:(NSError *__autoreleasing *)error
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error
 {        
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     
@@ -101,6 +101,11 @@
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
                                                            options:0
                                                              error:error];
+        
+        if (jsonData == nil) {
+            return NO;
+        }
+        
         NSString *jsonString = [[NSString alloc] initWithData:jsonData
                                                      encoding:NSUTF8StringEncoding];
         packet.data = jsonString;
@@ -110,10 +115,10 @@
         packet.type = MESSAGE;
     }
     
-    [self sendPacket:packet error:error];
+    return [self sendPacket:packet error:error];
 }
 
-- (void)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
@@ -122,23 +127,33 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
                                                        options:0
                                                          error:error];
+
+    if (jsonData == nil) {
+        return NO;
+    }
+    
     NSString *jsonString = [[NSString alloc] initWithData:jsonData
                                                  encoding:NSUTF8StringEncoding];
     
     packet.data = jsonString;
     
-    [self sendPacket:packet error:error];
+    return [self sendPacket:packet error:error];
 }
 
-- (void)sendPacket:(AZSocketIOPacket *)packet error:(NSError * __autoreleasing *)error
+- (BOOL)sendPacket:(AZSocketIOPacket *)packet error:(NSError * __autoreleasing *)error
 {
     if (self.transport && [self.transport isConnected]) {
         [self.transport send:[packet encode]];
     } else {
-        NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-        [errorDetail setValue:@"Not yet connected" forKey:NSLocalizedDescriptionKey];
-        *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+        if (error != NULL) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"Not yet connected" forKey:NSLocalizedDescriptionKey];
+            *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+            return NO;
+        }
     }
+    
+    return YES;
 }
 
 #pragma mark heartbeat
