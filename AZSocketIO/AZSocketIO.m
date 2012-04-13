@@ -19,6 +19,8 @@
 
 @property(nonatomic, strong)AFHTTPClient *httpClient;
 @property(nonatomic, strong)id<AZSocketIOTransport> transport;
+
+@property(nonatomic, strong)NSTimer *heartbeatTimer;
 @end
 
 @implementation AZSocketIO
@@ -27,6 +29,8 @@
 @synthesize transports;
 @synthesize sessionId;
 @synthesize connected;
+@synthesize heartbeatInterval;
+@synthesize disconnectInterval;
 
 @synthesize messageRecievedBlock;
 @synthesize eventRecievedBlock;
@@ -35,6 +39,8 @@
 @synthesize connectionBlock;
 @synthesize httpClient;
 @synthesize transport;
+
+@synthesize heartbeatTimer;
 - (id)initWithHost:(NSString *)_host andPort:(NSString *)_port
 {
     self = [super init];
@@ -47,6 +53,7 @@
     return self;
 }
 
+#pragma mark connection management
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure
 {
     self.connectionBlock = success;
@@ -61,6 +68,8 @@
                              NSLog(@"NO DIS IS BAD");
                          }
                          self.sessionId = [msg objectAtIndex:0];
+                         self.heartbeatInterval = 5;//[[msg objectAtIndex:1] intValue];
+                         self.disconnectInterval = [[msg objectAtIndex:2] intValue];
                          self.transports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
                          [self connectViaTransport:[self.transports objectAtIndex:0]];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -78,6 +87,12 @@
     }
 }
 
+- (void)disconnect
+{
+    [self.transport disconnect];
+}
+
+#pragma mark data sending
 - (void)send:(id)data error:(NSError *__autoreleasing *)error
 {        
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
@@ -125,14 +140,36 @@
         *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
     }
 }
+
+#pragma mark heartbeat
+- (void)clearHeartbeatTimeout
+{
+    [self.heartbeatTimer invalidate];
+    self.heartbeatTimer = nil;
+}
+- (void)startHeartbeatTimeout
+{
+    [self clearHeartbeatTimeout];
+    self.heartbeatTimer = [NSTimer scheduledTimerWithTimeInterval:self.heartbeatInterval
+                                                           target:self
+                                                         selector:@selector(heartbeatTimeout) 
+                                                         userInfo:nil
+                                                          repeats:NO];
+}
+- (void)heartbeatTimeout
+{
+    // TODO: Add reconnect support
+    [self disconnect];
+}
 #pragma mark AZSocketIOTransportDelegate
 - (void)didReceiveMessage:(NSString *)message
 {
+    [self startHeartbeatTimeout];
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
     id outData;
     switch (packet.type) {
         case DISCONNECT:
-            [self.transport disconnect];
+            [self disconnect];
             break;
         case CONNECT:
             if (self.connectionBlock) {

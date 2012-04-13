@@ -23,6 +23,8 @@ typedef void (^DisconnectedBlock)();
 @property(nonatomic, strong)NSArray *transports;
 @property(nonatomic, strong)NSString *sessionId;
 @property(nonatomic, strong)NSCondition *connected;
+@property(nonatomic, assign)NSInteger heartbeatInterval;
+@property(nonatomic, assign)NSInteger disconnectInterval;
 
 @property(nonatomic, copy)MessageRecievedBlock messageRecievedBlock;
 @property(nonatomic, copy)EventRecievedBlock eventRecievedBlock;
