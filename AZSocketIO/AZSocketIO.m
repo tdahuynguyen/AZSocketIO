@@ -8,6 +8,7 @@
 
 #import "AZSocketIO.h"
 #import "AFHTTPClient.h"
+#import "AFJSONUtilities.h"
 #import "AZSocketIOTransport.h"
 #import "AZWebsocketTransport.h"
 #import "AZSocketIOPacket.h"
@@ -20,6 +21,8 @@
 @property(nonatomic, strong)AFHTTPClient *httpClient;
 @property(nonatomic, strong)id<AZSocketIOTransport> transport;
 
+@property(nonatomic, strong)NSMutableDictionary *ackCallbacks;
+@property(nonatomic, assign)NSInteger ackCount;
 @property(nonatomic, strong)NSTimer *heartbeatTimer;
 @end
 
@@ -28,7 +31,6 @@
 @synthesize port;
 @synthesize transports;
 @synthesize sessionId;
-@synthesize connected;
 @synthesize heartbeatInterval;
 @synthesize disconnectInterval;
 
@@ -40,7 +42,10 @@
 @synthesize httpClient;
 @synthesize transport;
 
+@synthesize ackCallbacks;
+@synthesize ackCount;
 @synthesize heartbeatTimer;
+
 - (id)initWithHost:(NSString *)_host andPort:(NSString *)_port
 {
     self = [super init];
@@ -48,7 +53,8 @@
         self.host = _host;
         self.port = _port;
         self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:nil];
-        self.connected = [[NSCondition alloc] init];
+        self.ackCallbacks = [NSMutableDictionary dictionary];       
+        self.ackCount = 0;
     }
     return self;
 }
@@ -93,26 +99,54 @@
 }
 
 #pragma mark data sending
-- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error
-{        
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback
+{
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     
     if (![data isKindOfClass:[NSString class]]) {
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
-                                                           options:0
-                                                             error:error];
-        
+        NSData *jsonData = AFJSONEncode(data, error);
         if (jsonData == nil) {
             return NO;
         }
         
-        NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                     encoding:NSUTF8StringEncoding];
-        packet.data = jsonString;
+        packet.data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         packet.type = JSON_MESSAGE;
     } else {
         packet.data = data;
         packet.type = MESSAGE;
+    }
+    
+    if (callback != NULL) {
+        packet.Id = [NSString stringWithFormat:@"%d", ackCount++];
+        [self.ackCallbacks setObject:callback forKey:packet.Id];
+        packet.Id = [packet.Id stringByAppendingString:@"+"];
+    }
+    
+    return [self sendPacket:packet error:error];
+}
+
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error
+{        
+    return [self send:data error:error ack:NULL];
+}
+
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback
+{
+    AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
+    packet.type = EVENT;
+    
+    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
+    NSData *jsonData = AFJSONEncode(data, error);
+    if (jsonData == nil) {
+        return NO;
+    }
+    
+    packet.data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    packet.Id = [NSString stringWithFormat:@"%d", ackCount++];
+    
+    if (callback != NULL) {
+        [self.ackCallbacks setObject:callback forKey:packet.Id];
+        packet.Id = [packet.Id stringByAppendingString:@"+"];
     }
     
     return [self sendPacket:packet error:error];
@@ -120,24 +154,7 @@
 
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error
 {
-    AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
-    packet.type = EVENT;
-    
-    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data
-                                                       options:0
-                                                         error:error];
-
-    if (jsonData == nil) {
-        return NO;
-    }
-    
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData
-                                                 encoding:NSUTF8StringEncoding];
-    
-    packet.data = jsonString;
-    
-    return [self sendPacket:packet error:error];
+    return [self emit:name args:args error:error ack:NULL];
 }
 
 - (BOOL)sendPacket:(AZSocketIOPacket *)packet error:(NSError * __autoreleasing *)error
@@ -181,7 +198,7 @@
 {
     [self startHeartbeatTimeout];
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
-    id outData;
+    id outData; AZSocketIOACKMessage *ackMessage; ACKCallback callback;
     switch (packet.type) {
         case DISCONNECT:
             [self disconnect];
@@ -199,19 +216,20 @@
             self.messageRecievedBlock(packet.data);
             break;
         case JSON_MESSAGE:
-            outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]        
-                                                      options:NSJSONReadingMutableContainers 
-                                                        error:nil];
+            outData = AFJSONDecode([packet.data dataUsingEncoding:NSUTF8StringEncoding], nil);
             self.messageRecievedBlock(outData);
             break;
         case EVENT:
-            outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]        
-                                                      options:NSJSONReadingMutableContainers 
-                                                        error:nil];
+            outData = AFJSONDecode([packet.data dataUsingEncoding:NSUTF8StringEncoding], nil);
             self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
             break;
         case ACK:
-            NSLog(@"ACK");
+            ackMessage = [[AZSocketIOACKMessage alloc] initWithPacket:packet];
+            callback = [self.ackCallbacks objectForKey:ackMessage.messageId];
+            if (callback != NULL) {
+                callback(ackMessage.args);
+            }
+            [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;
         case ERROR:
             NSLog(@"Error");

@@ -30,3 +30,9 @@ typedef enum {
 - (id)initWithString:(NSString *)packetString;
 - (NSString *)encode;
 @end
+
+@interface AZSocketIOACKMessage : NSObject
+@property(nonatomic, strong)NSString *messageId;
+@property(nonatomic, strong)NSArray *args;
+- (id)initWithPacket:(AZSocketIOPacket *)packet;
+@end

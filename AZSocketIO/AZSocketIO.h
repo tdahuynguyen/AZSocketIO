@@ -17,12 +17,13 @@ typedef void (^ConnectedBlock)();
 typedef void (^FailedConnectionBlock)(NSError *error);
 typedef void (^DisconnectedBlock)();
 
+typedef void (^ACKCallback)(NSArray *args);
+
 @interface AZSocketIO : NSObject <AZSocketIOTransportDelegate>
 @property(nonatomic, strong)NSString *host;
 @property(nonatomic, strong)NSString *port;
 @property(nonatomic, strong)NSArray *transports;
 @property(nonatomic, strong)NSString *sessionId;
-@property(nonatomic, strong)NSCondition *connected;
 @property(nonatomic, assign)NSInteger heartbeatInterval;
 @property(nonatomic, assign)NSInteger disconnectInterval;
 
@@ -31,6 +32,8 @@ typedef void (^DisconnectedBlock)();
 @property(nonatomic, copy)DisconnectedBlock disconnectedBlock;
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port;
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure;
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;
 - (BOOL)send:(id)data error:(NSError * __autoreleasing *)error;
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error;
 @end

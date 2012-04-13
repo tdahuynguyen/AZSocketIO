@@ -73,6 +73,15 @@ describe(@"The socket", ^{
             [[expectFutureValue(recievedName) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:name];
             [[expectFutureValue(recievedArgs) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:args];
         });
+        it(@"can register an ack callback", ^{
+            __block NSString *name;
+            [socket emit:@"zippy" args:@"Oh HAI"
+                   error:nil
+                     ack:^(NSArray *args) {
+                         name = [args objectAtIndex:0];
+                     }];
+            [[expectFutureValue(name) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:@"kthx"];
+        });
     });
 });
 SPEC_END
