@@ -16,6 +16,7 @@ typedef void (^EventRecievedBlock)(NSString *eventName, id data);
 typedef void (^ConnectedBlock)();
 typedef void (^FailedConnectionBlock)(NSError *error);
 typedef void (^DisconnectedBlock)();
+typedef void (^ErrorMessageBlock)(NSString *data);
 
 typedef void (^ACKCallback)(NSArray *args);
 
@@ -30,6 +31,7 @@ typedef void (^ACKCallback)(NSArray *args);
 @property(nonatomic, copy)MessageRecievedBlock messageRecievedBlock;
 @property(nonatomic, copy)EventRecievedBlock eventRecievedBlock;
 @property(nonatomic, copy)DisconnectedBlock disconnectedBlock;
+@property(nonatomic, copy)ErrorMessageBlock errorMessageBlock;
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port;
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure;
 - (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;

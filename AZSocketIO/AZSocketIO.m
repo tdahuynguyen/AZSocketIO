@@ -37,6 +37,7 @@
 @synthesize messageRecievedBlock;
 @synthesize eventRecievedBlock;
 @synthesize disconnectedBlock;
+@synthesize errorMessageBlock;
 
 @synthesize connectionBlock;
 @synthesize httpClient;
@@ -71,10 +72,12 @@
                          NSString *response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
                          NSArray *msg = [response componentsSeparatedByString:@":"];
                          if ([msg count] < 4) {
-                             NSLog(@"NO DIS IS BAD");
+                             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+                             [errorDetail setValue:@"Server handshake message could not be decoded" forKey:NSLocalizedDescriptionKey];
+                             failure([NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail]);
                          }
                          self.sessionId = [msg objectAtIndex:0];
-                         self.heartbeatInterval = 5;//[[msg objectAtIndex:1] intValue];
+                         self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
                          self.disconnectInterval = [[msg objectAtIndex:2] intValue];
                          self.transports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
                          [self connectViaTransport:[self.transports objectAtIndex:0]];
@@ -232,7 +235,9 @@
             [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;
         case ERROR:
-            NSLog(@"Error");
+            if (self.errorMessageBlock) {
+                self.errorMessageBlock(packet.data);
+            }
             break;
         default:
             break;
