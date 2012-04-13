@@ -142,7 +142,7 @@
 			children = (
 				531C5684152F2F880044884C /* AZSocketIO */,
 				531C5698152F2F880044884C /* AZSocketIOTests */,
-				537F4D82152F7A1100416E3C /* Tester */,
+				537F4D82152F7A1100416E3C /* TestApp */,
 				531C5681152F2F880044884C /* Frameworks */,
 				531C5680152F2F880044884C /* Products */,
 				22920812E19D4927BF5A0A1F /* Pods.xcconfig */,
@@ -234,7 +234,7 @@
 			path = Transports;
 			sourceTree = "<group>";
 		};
-		537F4D82152F7A1100416E3C /* Tester */ = {
+		537F4D82152F7A1100416E3C /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
 				537F4D8B152F7A1100416E3C /* AppDelegate.h */,
@@ -244,6 +244,7 @@
 				537F4D92152F7A1100416E3C /* ViewController.m */,
 				537F4D83152F7A1100416E3C /* Supporting Files */,
 			);
+			name = TestApp;
 			path = Tester;
 			sourceTree = "<group>";
 		};
