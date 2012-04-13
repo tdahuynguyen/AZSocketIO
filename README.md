@@ -1,0 +1,3 @@
+AZSocketIO is a socket.io client for iOS.
+
+More to come soon...

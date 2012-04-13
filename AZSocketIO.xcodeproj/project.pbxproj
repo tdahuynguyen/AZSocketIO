@@ -338,7 +338,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0430;
-				ORGANIZATIONNAME = "Rally Software";
+				ORGANIZATIONNAME = "Patrick Shields";
 			};
 			buildConfigurationList = 531C5679152F2F880044884C /* Build configuration list for PBXProject "AZSocketIO" */;
 			compatibilityVersion = "Xcode 3.2";

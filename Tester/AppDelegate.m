@@ -3,7 +3,7 @@
 //  Tester
 //
 //  Created by Patrick Shields on 4/6/12.
-//  Copyright (c) 2012 Rally Software. All rights reserved.
+//  Copyright (c) 2012 Patrick Shields. All rights reserved.
 //
 
 #import "AppDelegate.h"
