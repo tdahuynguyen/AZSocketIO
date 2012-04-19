@@ -65,10 +65,10 @@ describe(@"The socket", ^{
             __block NSArray *args = [NSArray arrayWithObject:@"bar"];
             __block NSString *recievedName;
             __block NSArray *recievedArgs;
-            socket.eventRecievedBlock = ^(NSString *_name, id _args) {
-                recievedName = _name;
-                recievedArgs = _args;
-            };
+            [socket addCallbackForEventName:@"foo" callback:^(NSString *eventName, id data) {
+                recievedName = eventName;
+                recievedArgs = data;
+            }];
             [socket emit:name args:args error:nil];
             [[expectFutureValue(recievedName) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:name];
             [[expectFutureValue(recievedArgs) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:args];

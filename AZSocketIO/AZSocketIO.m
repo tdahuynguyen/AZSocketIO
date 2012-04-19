@@ -24,6 +24,8 @@
 @property(nonatomic, strong)NSMutableDictionary *ackCallbacks;
 @property(nonatomic, assign)NSInteger ackCount;
 @property(nonatomic, strong)NSTimer *heartbeatTimer;
+
+@property(nonatomic, strong)NSMutableDictionary *specificEventBlocks;
 @end
 
 @implementation AZSocketIO
@@ -47,6 +49,8 @@
 @synthesize ackCount;
 @synthesize heartbeatTimer;
 
+@synthesize specificEventBlocks;
+
 - (id)initWithHost:(NSString *)_host andPort:(NSString *)_port
 {
     self = [super init];
@@ -56,6 +60,7 @@
         self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:nil];
         self.ackCallbacks = [NSMutableDictionary dictionary];       
         self.ackCount = 0;
+        self.specificEventBlocks = [NSMutableDictionary new];
     }
     return self;
 }
@@ -176,6 +181,36 @@
     return YES;
 }
 
+#pragma mark event callback registration
+- (void)addCallbackForEventName:(NSString *)name callback:(EventRecievedBlock)block
+{
+    NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
+    if (callbacks == nil) {
+        callbacks = [NSMutableArray array];
+        [self.specificEventBlocks setValue:callbacks forKey:name];
+    }
+    [callbacks addObject:block];
+}
+- (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventRecievedBlock)block
+{
+    NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
+    if (callbacks != nil) {
+        NSInteger count = [callbacks count];
+        [callbacks removeObject:block];
+        if ([callbacks count] == 0) {
+            [self.specificEventBlocks removeObjectForKey:name];
+            return YES;
+        }
+        return count != [callbacks count];
+    }
+    return NO;
+}
+- (NSInteger)removeCallbacksForEvent:(NSString *)name
+{
+    NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
+    [self.specificEventBlocks removeObjectForKey:name];
+    return [callbacks count];
+}
 #pragma mark heartbeat
 - (void)clearHeartbeatTimeout
 {
@@ -201,7 +236,7 @@
 {
     [self startHeartbeatTimeout];
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
-    id outData; AZSocketIOACKMessage *ackMessage; ACKCallback callback;
+    id outData; AZSocketIOACKMessage *ackMessage; ACKCallback callback; NSArray *callbackList;
     switch (packet.type) {
         case DISCONNECT:
             [self disconnect];
@@ -224,7 +259,14 @@
             break;
         case EVENT:
             outData = AFJSONDecode([packet.data dataUsingEncoding:NSUTF8StringEncoding], nil);
-            self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+            callbackList = [self.specificEventBlocks objectForKey:[outData objectForKey:@"name"]];
+            if (callbackList != nil) {
+                for (EventRecievedBlock block in callbackList) {
+                    block([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+                }
+            } else {
+                self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+            }
             break;
         case ACK:
             ackMessage = [[AZSocketIOACKMessage alloc] initWithPacket:packet];
