@@ -23,6 +23,7 @@ typedef void (^ACKCallback)(NSArray *args);
 @interface AZSocketIO : NSObject <AZSocketIOTransportDelegate>
 @property(nonatomic, strong)NSString *host;
 @property(nonatomic, strong)NSString *port;
+@property(nonatomic, assign)BOOL secureConnections;
 @property(nonatomic, strong)NSArray *transports;
 @property(nonatomic, strong)NSString *sessionId;
 @property(nonatomic, assign)NSInteger heartbeatInterval;

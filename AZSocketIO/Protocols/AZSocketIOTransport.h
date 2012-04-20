@@ -11,10 +11,11 @@
 
 @protocol AZSocketIOTransport
 @required
+@property(nonatomic, assign)BOOL secureConnections;
 - (void)connect;
 - (void)setDelegate:(id<AZSocketIOTransportDelegate>)delegate;
 - (void)disconnect;
 - (void)send:(NSString*)msg;
-- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate;
+- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)_delegate secureConnections:(BOOL)_secureConnections;
 - (BOOL)isConnected;
 @end

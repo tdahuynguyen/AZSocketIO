@@ -31,6 +31,7 @@
 @implementation AZSocketIO
 @synthesize host;
 @synthesize port;
+@synthesize secureConnections;
 @synthesize transports;
 @synthesize sessionId;
 @synthesize heartbeatInterval;
@@ -57,6 +58,7 @@
     if (self) {
         self.host = _host;
         self.port = _port;
+        self.secureConnections = NO;
         self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:nil];
         self.ackCallbacks = [NSMutableDictionary dictionary];       
         self.ackCount = 0;
@@ -69,7 +71,8 @@
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure
 {
     self.connectionBlock = success;
-    NSString *urlString = [NSString stringWithFormat:@"http://%@:%@/socket.io/%@", 
+    NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
+    NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/%@", protocolString,
                            self.host, self.port, PROTOCOL_VERSION];
     [self.httpClient getPath:urlString
                   parameters:nil
@@ -94,7 +97,7 @@
 - (void)connectViaTransport:(NSString*)transportType 
 {
     if ([transportType isEqualToString:@"websocket"]) {
-        self.transport = [[AZWebsocketTransport alloc] initWithDelegate:self];
+        self.transport = [[AZWebsocketTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
         [self.transport connect];
     } else {
         NSLog(@"Transport not implemented");

@@ -15,19 +15,25 @@
 @end
 
 @implementation AZWebsocketTransport
+@synthesize secureConnections;
+
 @synthesize websocket;
 @synthesize delegate;
 @synthesize connected;
 
 #pragma mark AZSocketIOTransport
-- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)_delegate
+- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)_delegate secureConnections:(BOOL)_secureConnections
 {
     self = [super init];
     if (self) {
         self.connected = NO;
         self.delegate = _delegate;
-        NSString *urlString = [NSString stringWithFormat:@"ws://%@:%@/socket.io/1/websocket/%@",
-                         [self.delegate host], [self.delegate port], [self.delegate sessionId]];
+        self.secureConnections = _secureConnections;
+        
+        NSString *protocolString = self.secureConnections ? @"wss://" : @"ws://";
+        NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/1/websocket/%@", 
+                               protocolString, [self.delegate host], [self.delegate port], 
+                               [self.delegate sessionId]];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
         self.websocket = [[SRWebSocket alloc] initWithURLRequest:request];
         self.websocket.delegate = self;
