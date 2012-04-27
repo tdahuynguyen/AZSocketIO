@@ -16,6 +16,8 @@
 #define PROTOCOL_VERSION @"1"
 
 @interface AZSocketIO ()
+@property(nonatomic, strong)NSOperationQueue *queue;
+
 @property(nonatomic, strong)ConnectedBlock connectionBlock;
 
 @property(nonatomic, strong)AFHTTPClient *httpClient;
@@ -42,6 +44,8 @@
 @synthesize disconnectedBlock;
 @synthesize errorMessageBlock;
 
+@synthesize queue;
+
 @synthesize connectionBlock;
 @synthesize httpClient;
 @synthesize transport;
@@ -63,6 +67,9 @@
         self.ackCallbacks = [NSMutableDictionary dictionary];       
         self.ackCount = 0;
         self.specificEventBlocks = [NSMutableDictionary new];
+        
+        self.queue = [[NSOperationQueue alloc] init];
+        [self.queue setSuspended:YES];
     }
     return self;
 }
@@ -170,18 +177,10 @@
 
 - (BOOL)sendPacket:(AZSocketIOPacket *)packet error:(NSError * __autoreleasing *)error
 {
-    if (self.transport && [self.transport isConnected]) {
+    [self.queue addOperation:[NSBlockOperation blockOperationWithBlock:^{
         [self.transport send:[packet encode]];
-    } else {
-        if (error != NULL) {
-            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-            [errorDetail setValue:@"Not yet connected" forKey:NSLocalizedDescriptionKey];
-            *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
-            return NO;
-        }
-    }
-    
-    return YES;
+    }]];
+    return self.queue.isSuspended;
 }
 
 #pragma mark event callback registration
@@ -249,6 +248,7 @@
                 self.connectionBlock();
                 self.connectionBlock = nil;
             }
+            [self.queue setSuspended:NO];
             break;
         case HEARTBEAT:
             [self.transport send:message];
@@ -291,6 +291,7 @@
 
 - (void)didClose
 {
+    [self.queue setSuspended:YES];
     if (self.disconnectedBlock) {
         self.disconnectedBlock();
     }

@@ -17,10 +17,10 @@ describe(@"The socket", ^{
             socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000"];
             [socket shouldNotBeNil];
         });
-        it(@"should give an error when attempting to send", ^{
+        it(@"should queue messages", ^{
             NSError *error = nil;
-            [socket send:@"Hi" error:&error];
-            [[error.description should] beNonNil];
+            [[theValue([socket send:@"Hi" error:&error]) should] beTrue];
+            [error shouldBeNil];
         });
     });
     context(@"when connecting", ^{
@@ -35,10 +35,10 @@ describe(@"The socket", ^{
             } andFailure:^(NSError *error) {
                 connected = [NSNumber numberWithBool:NO];
             }];
-            [[expectFutureValue(connected) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:[NSNumber numberWithBool:YES]];
+            [[expectFutureValue(connected) shouldEventually] equal:[NSNumber numberWithBool:YES]];
         });
         it(@"recieves an initial event", ^{
-            [[expectFutureValue(args) shouldEventuallyBeforeTimingOutAfter(5.0)] beNonNil];
+            [[expectFutureValue(args) shouldEventually] beNonNil];
         });
     });
     context(@"after connecting", ^{
@@ -49,7 +49,7 @@ describe(@"The socket", ^{
                 recieved = [_args objectAtIndex:0];
             };
             [socket send:sent error:nil];
-            [[expectFutureValue(recieved) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:sent];
+            [[expectFutureValue(recieved) shouldEventually] equal:sent];
         });
         it(@"can send a json message and recieve the return val", ^{
             __block NSDictionary *sent = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];;
@@ -58,29 +58,50 @@ describe(@"The socket", ^{
                 recieved = [_args objectAtIndex:0];
             };
             [socket send:sent error:nil];
-            [[expectFutureValue(recieved) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:sent];
+            [[expectFutureValue(recieved) shouldEventually] equal:sent];
         });
         it(@"can emit an event and recieve the return val", ^{
-            __block NSString *name = @"foo";
+            __block NSString *name = @"ackLessEvent";
             __block NSArray *args = [NSArray arrayWithObject:@"bar"];
             __block NSString *recievedName;
             __block NSArray *recievedArgs;
-            [socket addCallbackForEventName:@"foo" callback:^(NSString *eventName, id data) {
+            [socket addCallbackForEventName:name callback:^(NSString *eventName, id data) {
                 recievedName = eventName;
                 recievedArgs = data;
             }];
             [socket emit:name args:args error:nil];
-            [[expectFutureValue(recievedName) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:name];
-            [[expectFutureValue(recievedArgs) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:args];
+            [[expectFutureValue(recievedName) shouldEventually] equal:name];
+            [[expectFutureValue(recievedArgs) shouldEventually] equal:args];
         });
         it(@"can register an ack callback", ^{
             __block NSString *name;
-            [socket emit:@"zippy" args:@"Oh HAI"
+            [socket emit:@"ackWithArg" args:@"kthx"
                    error:nil
                      ack:^(NSArray *args) {
                          name = [args objectAtIndex:0];
                      }];
-            [[expectFutureValue(name) shouldEventuallyBeforeTimingOutAfter(5.0)] equal:@"kthx"];
+            [[expectFutureValue(name) shouldEventually] equal:@"kthx"];
+        });
+        it(@"can recieve an empty ack callback", ^{
+            __block BOOL empty;
+            [socket emit:@"ackWithoutArgs" args:@"never going to see this"
+                   error:nil
+                     ack:^(NSArray *args) {
+                         empty = (args == nil);
+                     }];
+            [[expectFutureValue(theValue(empty)) shouldEventually] beTrue];
+        });
+        it(@"can recieve an ack callback with multiple return values", ^{
+            __block NSString *one;
+            __block NSString *two;
+            [socket emit:@"ackWithArgs" args:[NSArray arrayWithObjects:@"one", @"two", nil]
+                   error:nil
+                     ack:^(NSArray *args) {
+                         one = [args objectAtIndex:0];
+                         two = [args objectAtIndex:1];
+                     }];
+            [[expectFutureValue(one) shouldEventually] equal:@"one"];
+            [[expectFutureValue(two) shouldEventually] equal:@"two"];
         });
     });
 });
