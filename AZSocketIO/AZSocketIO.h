@@ -39,6 +39,7 @@ typedef void (^ACKCallback)(NSArray *args);
 - (BOOL)send:(id)data error:(NSError * __autoreleasing *)error;
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error;
+- (void)disconnect;
 
 - (void)addCallbackForEventName:(NSString *)name callback:(EventRecievedBlock)block;
 - (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventRecievedBlock)block;

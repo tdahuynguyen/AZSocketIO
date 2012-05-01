@@ -19,7 +19,7 @@ describe(@"The socket", ^{
         });
         it(@"should queue messages", ^{
             NSError *error = nil;
-            [[theValue([socket send:@"Hi" error:&error]) should] beTrue];
+            [[theValue([socket send:@"Hi" error:&error]) should] beFalse];
             [error shouldBeNil];
         });
     });
@@ -102,6 +102,40 @@ describe(@"The socket", ^{
                      }];
             [[expectFutureValue(one) shouldEventually] equal:@"one"];
             [[expectFutureValue(two) shouldEventually] equal:@"two"];
+        });
+    });
+    context(@"when disconnecting", ^{
+        it(@"can disconnect", ^{
+            __block BOOL disconnected = FALSE;
+            [socket setDisconnectedBlock:^() {
+                disconnected = TRUE;
+            }];
+            [socket disconnect];
+            [[expectFutureValue(theValue(disconnected)) shouldEventually] beTrue];
+        });
+    });
+    context(@"after disconnecting", ^{
+        __block NSString *sent = @"Hi", *recieved;
+        it(@"can still queue messages", ^{
+            [[theValue([socket send:sent error:nil]) should] beFalse];
+        });
+        __block BOOL connected = NO;
+        __block NSString *initialEvent;
+        it(@"can connect again", ^{
+            [socket connectWithSuccess:^{
+                connected = YES;
+                socket.eventRecievedBlock = ^(NSString *name, id _args) {
+                    initialEvent = name;
+                    socket.eventRecievedBlock = ^(NSString *name, id _args) {
+                        recieved = [_args objectAtIndex:0];
+                    };
+                };
+            } andFailure:^(NSError *error) {}];
+            [[expectFutureValue(theValue(connected)) shouldEventually] beYes];
+            [[expectFutureValue(initialEvent) shouldEventually] equal:@"news"];
+        });
+        it(@"recieves a response from the queue message", ^{
+            [[expectFutureValue(recieved) shouldEventually] equal:sent];
         });
     });
 });

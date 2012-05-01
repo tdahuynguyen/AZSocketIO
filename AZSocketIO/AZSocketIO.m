@@ -113,6 +113,7 @@
 
 - (void)disconnect
 {
+    [self clearHeartbeatTimeout];
     [self.transport disconnect];
 }
 
@@ -180,7 +181,7 @@
     [self.queue addOperation:[NSBlockOperation blockOperationWithBlock:^{
         [self.transport send:[packet encode]];
     }]];
-    return self.queue.isSuspended;
+    return !self.queue.isSuspended;
 }
 
 #pragma mark event callback registration
