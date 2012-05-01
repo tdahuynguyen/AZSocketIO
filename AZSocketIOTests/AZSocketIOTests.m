@@ -22,6 +22,9 @@ describe(@"The socket", ^{
             [[theValue([socket send:@"Hi" error:&error]) should] beFalse];
             [error shouldBeNil];
         });
+        it(@"should say it's not connected", ^{
+            [[theValue(socket.isConnected) should] beFalse];
+        });
     });
     context(@"when connecting", ^{
         __block NSDictionary *args;
@@ -39,6 +42,9 @@ describe(@"The socket", ^{
         });
         it(@"recieves an initial event", ^{
             [[expectFutureValue(args) shouldEventually] beNonNil];
+        });
+        it(@"should say it's connected", ^{
+            [[theValue(socket.isConnected) should] beTrue];
         });
     });
     context(@"after connecting", ^{
@@ -115,6 +121,9 @@ describe(@"The socket", ^{
         });
     });
     context(@"after disconnecting", ^{
+        it(@"should say it's not connected", ^{
+            [[theValue(socket.isConnected) should] beFalse];
+        });
         __block NSString *sent = @"Hi", *recieved;
         it(@"can still queue messages", ^{
             [[theValue([socket send:sent error:nil]) should] beFalse];

@@ -29,6 +29,8 @@ typedef void (^ACKCallback)(NSArray *args);
 @property(nonatomic, assign)NSInteger heartbeatInterval;
 @property(nonatomic, assign)NSInteger disconnectInterval;
 
+@property(nonatomic, readonly)BOOL isConnected;
+
 @property(nonatomic, copy)MessageRecievedBlock messageRecievedBlock;
 @property(nonatomic, copy)EventRecievedBlock eventRecievedBlock;
 @property(nonatomic, copy)DisconnectedBlock disconnectedBlock;

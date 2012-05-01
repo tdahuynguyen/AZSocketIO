@@ -39,6 +39,8 @@
 @synthesize heartbeatInterval;
 @synthesize disconnectInterval;
 
+@synthesize isConnected;
+
 @synthesize messageRecievedBlock;
 @synthesize eventRecievedBlock;
 @synthesize disconnectedBlock;
@@ -115,6 +117,11 @@
 {
     [self clearHeartbeatTimeout];
     [self.transport disconnect];
+}
+
+- (BOOL)isConnected
+{
+    return self.transport && [self.transport isConnected];
 }
 
 #pragma mark data sending
