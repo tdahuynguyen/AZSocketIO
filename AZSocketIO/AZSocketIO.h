@@ -35,15 +35,22 @@ typedef void (^ACKCallback)(NSArray *args);
 @property(nonatomic, copy)EventRecievedBlock eventRecievedBlock;
 @property(nonatomic, copy)DisconnectedBlock disconnectedBlock;
 @property(nonatomic, copy)ErrorMessageBlock errorMessageBlock;
+
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port;
-- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure;
-- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;
+- (void)connectWithSuccess:(void (^)())success andFailure:(void (^)(NSError *error))failure;
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(void (^)(NSArray *data))callback;
 - (BOOL)send:(id)data error:(NSError * __autoreleasing *)error;
-- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback;
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(void (^)(NSArray *data))callback;
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError * __autoreleasing *)error;
 - (void)disconnect;
 
-- (void)addCallbackForEventName:(NSString *)name callback:(EventRecievedBlock)block;
-- (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventRecievedBlock)block;
+- (void)addCallbackForEventName:(NSString *)name callback:(void (^)(NSString *eventName, id data))block;
+- (BOOL)removeCallbackForEvent:(NSString *)name callback:(void (^)(NSString *eventName, id data))block;
 - (NSInteger)removeCallbacksForEvent:(NSString *)name;
+
+#pragma mark overridden setters
+- (void)setMessageRecievedBlock:(void (^)(id data))messageRecievedBlock;
+- (void)setEventRecievedBlock:(void (^)(NSString *eventName, id data))eventRecievedBlock;
+- (void)setDisconnectedBlock:(void (^)())disconnectedBlock;
+- (void)setErrorMessageBlock:(void (^)(NSString *data))errorMessageBlock;
 @end

@@ -51,18 +51,18 @@ describe(@"The socket", ^{
         it(@"can send a message and recieve the return val", ^{
             __block NSString *sent = @"FOO";
             __block NSString *recieved;
-            socket.eventRecievedBlock = ^(NSString *name, id _args) {
-                recieved = [_args objectAtIndex:0];
-            };
+            [socket setEventRecievedBlock:^(NSString *eventName, id data) {
+                recieved = [data objectAtIndex:0];
+            }];
             [socket send:sent error:nil];
             [[expectFutureValue(recieved) shouldEventually] equal:sent];
         });
         it(@"can send a json message and recieve the return val", ^{
             __block NSDictionary *sent = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];;
             __block NSDictionary *recieved;
-            socket.eventRecievedBlock = ^(NSString *name, id _args) {
-                recieved = [_args objectAtIndex:0];
-            };
+            [socket setEventRecievedBlock:^(NSString *eventName, id data) {
+                recieved = [data objectAtIndex:0];
+            }];
             [socket send:sent error:nil];
             [[expectFutureValue(recieved) shouldEventually] equal:sent];
         });
@@ -113,7 +113,7 @@ describe(@"The socket", ^{
     context(@"when disconnecting", ^{
         it(@"can disconnect", ^{
             __block BOOL disconnected = FALSE;
-            [socket setDisconnectedBlock:^() {
+            [socket setDisconnectedBlock:^{
                 disconnected = TRUE;
             }];
             [socket disconnect];
