@@ -12,6 +12,7 @@
 @protocol AZSocketIOTransport
 @required
 @property(nonatomic, assign)BOOL secureConnections;
+@property(nonatomic, readonly, getter = isConnected)BOOL connected;
 - (void)connect;
 - (void)setDelegate:(id<AZSocketIOTransportDelegate>)delegate;
 - (void)disconnect;

@@ -21,11 +21,13 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000"];
+    __weak AZSocketIO *blockSocket = socket;
     [socket connectWithSuccess:^{
         NSLog(@"Hurray");
         [socket setEventRecievedBlock:^(NSString *eventName, id data) {
             self.name.text = eventName;
             self.args.text = [data description];
+            [blockSocket send:@"Hi" error:nil];
         }];
     } andFailure:^(NSError *error) {
         NSLog(@"Boo: %@", error);

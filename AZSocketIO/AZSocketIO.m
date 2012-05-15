@@ -11,6 +11,7 @@
 #import "AFJSONUtilities.h"
 #import "AZSocketIOTransport.h"
 #import "AZWebsocketTransport.h"
+#import "AZxhrTransport.h"
 #import "AZSocketIOPacket.h"
 
 #define PROTOCOL_VERSION @"1"
@@ -107,10 +108,12 @@
 {
     if ([transportType isEqualToString:@"websocket"]) {
         self.transport = [[AZWebsocketTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
-        [self.transport connect];
+    } else if ([transportType isEqualToString:@"xhr-polling"]) {
+        self.transport = [[AZxhrTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
     } else {
         NSLog(@"Transport not implemented");
     }
+    [self.transport connect];
 }
 
 - (void)disconnect
