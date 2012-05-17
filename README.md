@@ -5,6 +5,7 @@ AZSocketIO is a socket.io client for iOS. It:
 * Supports websockets and xhr-polling transports
 * Is about alpha stage
 * Is heavily reliant on blocks for it's API
+* Has appledocs for all user facing classes
 * Welcomes patches and issues
 
 Dependencies
