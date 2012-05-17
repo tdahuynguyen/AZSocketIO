@@ -8,6 +8,8 @@ AZSocketIO is a socket.io client for iOS. It:
 * Has appledocs for all user facing classes
 * Welcomes patches and issues
 
+It does not currently support namespacing a socket.
+
 Dependencies
 ------------
 AZSocketIO uses cocoapods, so you shouldn't have to think too much about dependencies, but here they are.
