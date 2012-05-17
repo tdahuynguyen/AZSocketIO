@@ -39,7 +39,9 @@
               parameters:nil
                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                      self.connected = YES;
-                     [self.delegate didOpen];                     
+                     if ([self.delegate respondsToSelector:@selector(didOpen)]) {
+                         [self.delegate didOpen];
+                     }                     
                      NSString *responseString = [self stringFromData:responseObject];
                      NSArray *messages = [responseString componentsSeparatedByString:@"\ufffd"];
                      if ([messages count] > 0) {
@@ -55,6 +57,9 @@
                      }
                  } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                      [self.delegate didFailWithError:error];
+                     if ([self.delegate respondsToSelector:@selector(didClose)]) {
+                         [self.delegate didClose];
+                     }
                  }];
 }
 - (void)disconnect
@@ -65,7 +70,9 @@
                  success:^(AFHTTPRequestOperation *operation, id responseObject) {} 
                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {}];
     self.connected = NO;
-    [self.delegate didClose];
+    if ([self.delegate respondsToSelector:@selector(didClose)]) {
+        [self.delegate didClose];
+    }
 }
 - (void)send:(NSString*)msg
 {
@@ -76,10 +83,13 @@
     [request setValue:@"Keep-Alive" forHTTPHeaderField:@"Connection"];
     
     AFHTTPRequestOperation *op = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {} 
-                              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                  [self.delegate didFailWithError:error];
-                              }];
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if ([self.delegate respondsToSelector:@selector(didSendMessage)]) {
+            [self.delegate didSendMessage];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self.delegate didFailWithError:error];
+    }];
     [self.client enqueueHTTPRequestOperation:op];
 }
 - (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)_delegate secureConnections:(BOOL)_secureConnections

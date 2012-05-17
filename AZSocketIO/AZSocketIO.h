@@ -26,9 +26,8 @@
 typedef void (^MessageRecievedBlock)(id data);
 typedef void (^EventRecievedBlock)(NSString *eventName, id data);
 typedef void (^ConnectedBlock)();
-typedef void (^FailedConnectionBlock)(NSError *error);
 typedef void (^DisconnectedBlock)();
-typedef void (^ErrorMessageBlock)(NSString *data);
+typedef void (^ErrorBlock)(NSError *error);
 
 typedef void (^ACKCallback)(NSArray *args);
 
@@ -70,7 +69,7 @@ typedef void (^ACKCallback)(NSArray *args);
 /**
  This block will be called when an error is reported by the socket.io server or the connection becomes unusable.
  */
-@property(nonatomic, copy)ErrorMessageBlock errorMessageBlock;
+@property(nonatomic, copy)ErrorBlock errorBlock;
 
 ///----------------------------------------------------
 /// @name Creating and Connecting to a Socket.io Server
@@ -191,5 +190,5 @@ typedef void (^ACKCallback)(NSArray *args);
 - (void)setMessageRecievedBlock:(void (^)(id data))messageRecievedBlock;
 - (void)setEventRecievedBlock:(void (^)(NSString *eventName, id data))eventRecievedBlock;
 - (void)setDisconnectedBlock:(void (^)())disconnectedBlock;
-- (void)setErrorMessageBlock:(void (^)(NSString *data))errorMessageBlock;
+- (void)setErrorBlock:(void (^)(NSError *error))errorBlock;
 @end

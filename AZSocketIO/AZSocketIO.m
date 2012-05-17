@@ -62,7 +62,7 @@
 @synthesize messageRecievedBlock;
 @synthesize eventRecievedBlock;
 @synthesize disconnectedBlock;
-@synthesize errorMessageBlock;
+@synthesize errorBlock;
 
 @synthesize queue;
 
@@ -95,9 +95,10 @@
 }
 
 #pragma mark connection management
-- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(FailedConnectionBlock)failure
+- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure
 {
     self.connectionBlock = success;
+    self.errorBlock = failure;
     NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
     NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/%@", protocolString,
                            self.host, self.port, PROTOCOL_VERSION];
@@ -308,8 +309,11 @@
             [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;
         case ERROR:
-            if (self.errorMessageBlock) {
-                self.errorMessageBlock(packet.data);
+            if (self.errorBlock) {
+                NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+                [errorDetail setValue:packet.data forKey:NSLocalizedDescriptionKey];
+                NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+                self.errorBlock(error);
             }
             break;
         default:
@@ -325,5 +329,10 @@
     }
 }
 
-- (void)didOpen{}
+- (void)didFailWithError:(NSError *)error
+{
+    if (self.errorBlock) {
+        self.errorBlock(error);
+    }
+}
 @end

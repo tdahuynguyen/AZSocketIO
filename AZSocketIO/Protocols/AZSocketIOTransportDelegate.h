@@ -23,19 +23,12 @@
 /**
  The `AZSocketIOTransportDelegate` protocol allows the adopting delegate to respond to messages from an `AZSocketIOTransport`.
  */
-@protocol AZSocketIOTransportDelegate
+@protocol AZSocketIOTransportDelegate <NSObject>
 @optional
 
 ///-------------------------------------------
 /// @name Informing Delegate of Status Changes
 ///-------------------------------------------
-
-/**
- Tells the delegate that the transport has failed.
- 
- @param error An instance of `NSError` that describes the problem.
- */
-- (void)didFailWithError:(NSError*)error;
 
 /**
  Tells the delegate that the transport has opened.
@@ -53,6 +46,13 @@
 - (void)didSendMessage;
 
 @required
+
+/**
+ Tells the delegate that the transport has failed.
+ 
+ @param error An instance of `NSError` that describes the problem.
+ */
+- (void)didFailWithError:(NSError*)error;
 
 ///--------------------------------------------
 /// @name Recieving Messages From the Transport

@@ -59,6 +59,9 @@
 - (void)send:(NSString *)msg
 {
     [self.websocket send:msg];
+    if ([self.delegate respondsToSelector:@selector(didSendMessage)]) {
+        [self.delegate didSendMessage];
+    }
 }
 - (void)disconnect
 {
@@ -73,12 +76,16 @@
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
     self.connected = YES;
-    [self.delegate didOpen];
+    if ([self.delegate respondsToSelector:@selector(didOpen)]) {
+        [self.delegate didOpen];
+    }
 }
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     self.connected = NO;
-    [self.delegate didClose];
+    if ([self.delegate respondsToSelector:@selector(didClose)]) {
+        [self.delegate didClose];
+    }
 }
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
