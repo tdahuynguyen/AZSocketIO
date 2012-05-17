@@ -53,6 +53,10 @@ typedef void (^ACKCallback)(NSArray *args);
  @warning This property may conflict with the state of the transport during state changes.
  */
 @property(nonatomic, readonly)BOOL isConnected;
+/**
+ The set of transports the client wishes to use. Defaults to "websocket" and "xhr-polling".
+ */
+@property(nonatomic, strong)NSMutableSet *transports;
 
 /**
  This block will be called on the reception of any non-protocol message.

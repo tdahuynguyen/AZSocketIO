@@ -142,7 +142,8 @@ describe(@"The socket", ^{
         });
         __block BOOL connected = NO;
         __block NSString *initialEvent;
-        it(@"can connect again", ^{
+        it(@"can connect again using a different transport", ^{
+            socket.transports = [NSSet setWithObject:@"xhr-polling"];
             [socket connectWithSuccess:^{
                 connected = YES;
                 socket.eventRecievedBlock = ^(NSString *name, id _args) {

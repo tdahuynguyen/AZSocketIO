@@ -42,7 +42,7 @@
 
 @property(nonatomic, strong)NSMutableDictionary *specificEventBlocks;
 
-@property(nonatomic, strong)NSArray *transports;
+@property(nonatomic, strong)NSArray *availableTransports;
 @property(nonatomic, strong)NSString *sessionId;
 @property(nonatomic, assign)NSInteger heartbeatInterval;
 @property(nonatomic, assign)NSInteger disconnectInterval;
@@ -53,6 +53,7 @@
 @synthesize port;
 @synthesize secureConnections;
 @synthesize transports;
+@synthesize availableTransports;
 @synthesize sessionId;
 @synthesize heartbeatInterval;
 @synthesize disconnectInterval;
@@ -90,6 +91,8 @@
         
         self.queue = [[NSOperationQueue alloc] init];
         [self.queue setSuspended:YES];
+        
+        self.transports = [NSMutableSet setWithObjects:@"websocket", @"xhr-polling", nil];
     }
     return self;
 }
@@ -115,11 +118,26 @@
                          self.sessionId = [msg objectAtIndex:0];
                          self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
                          self.disconnectInterval = [[msg objectAtIndex:2] intValue];
-                         self.transports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
-                         [self connectViaTransport:[self.transports objectAtIndex:0]];
+                         self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
+                         [self connect];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                          failure(error);
                      }];
+}
+
+- (void)connect
+{
+    for (NSString *transportType in self.availableTransports) {
+        if ([self.transports containsObject:transportType]) {
+            [self connectViaTransport:transportType];
+            return;
+        }
+    }
+    
+    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+    [errorDetail setValue:@"None of the available transports are recognized by this server" forKey:NSLocalizedDescriptionKey];
+    NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+    self.errorBlock(error);
 }
 
 - (void)connectViaTransport:(NSString*)transportType 
