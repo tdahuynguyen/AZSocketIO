@@ -35,10 +35,12 @@
 
 @property(nonatomic, strong)AFHTTPClient *httpClient;
 @property(nonatomic, strong)id<AZSocketIOTransport> transport;
+@property(nonatomic, strong)NSDictionary *transportMap;
 
 @property(nonatomic, strong)NSMutableDictionary *ackCallbacks;
-@property(nonatomic, assign)NSInteger ackCount;
+@property(nonatomic, assign)NSUInteger ackCount;
 @property(nonatomic, strong)NSTimer *heartbeatTimer;
+@property(nonatomic, assign)NSUInteger connectionAttempts;
 
 @property(nonatomic, strong)NSMutableDictionary *specificEventBlocks;
 
@@ -46,43 +48,18 @@
 @property(nonatomic, strong)NSString *sessionId;
 @property(nonatomic, assign)NSInteger heartbeatInterval;
 @property(nonatomic, assign)NSInteger disconnectInterval;
+
+@property(nonatomic, assign)NSTimeInterval currentReconnectDelay;
 @end
 
 @implementation AZSocketIO
-@synthesize host;
-@synthesize port;
-@synthesize secureConnections;
-@synthesize transports;
-@synthesize availableTransports;
-@synthesize sessionId;
-@synthesize heartbeatInterval;
-@synthesize disconnectInterval;
 
-@synthesize isConnected;
-
-@synthesize messageRecievedBlock;
-@synthesize eventRecievedBlock;
-@synthesize disconnectedBlock;
-@synthesize errorBlock;
-
-@synthesize queue;
-
-@synthesize connectionBlock;
-@synthesize httpClient;
-@synthesize transport;
-
-@synthesize ackCallbacks;
-@synthesize ackCount;
-@synthesize heartbeatTimer;
-
-@synthesize specificEventBlocks;
-
-- (id)initWithHost:(NSString *)_host andPort:(NSString *)_port
+- (id)initWithHost:(NSString *)host andPort:(NSString *)port
 {
     self = [super init];
     if (self) {
-        self.host = _host;
-        self.port = _port;
+        self.host = host;
+        self.port = port;
         self.secureConnections = NO;
         self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:nil];
         self.ackCallbacks = [NSMutableDictionary dictionary];       
@@ -93,8 +70,20 @@
         [self.queue setSuspended:YES];
         
         self.transports = [NSMutableSet setWithObjects:@"websocket", @"xhr-polling", nil];
+        self.transportMap = @{ [AZWebsocketTransport class] : @"websocket", [AZxhrTransport class] : @"xhr-polling" };
+        
+        self.reconnect = YES;
+        self.reconnectionDelay = .5;
+        self.reconnectionLimit = MAXFLOAT;
+        self.maxReconnectionAttempts = 10;
     }
     return self;
+}
+
+- (void)setReconnectionDelay:(NSTimeInterval)reconnectionDelay
+{
+    _reconnectionDelay = reconnectionDelay;
+    _currentReconnectDelay = reconnectionDelay;
 }
 
 #pragma mark connection management
@@ -121,12 +110,15 @@
                          self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
                          [self connect];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                         failure(error);
+                         if (![self reconnect]) {
+                             failure(error);
+                         }
                      }];
 }
 
 - (void)connect
 {
+    self.connectionAttempts++;
     for (NSString *transportType in self.availableTransports) {
         if ([self.transports containsObject:transportType]) {
             [self connectViaTransport:transportType];
@@ -163,6 +155,34 @@
     return self.transport && [self.transport isConnected];
 }
 
+- (BOOL)reconnect
+{
+    if (self.reconnect) {
+        NSString *transportName = [self.transportMap objectForKey:[self.transport class]];
+        self.availableTransports = [self.availableTransports filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+            return ![transportName isEqualToString:evaluatedObject] && [self.transports containsObject:evaluatedObject];
+        }]];
+        if ([self.availableTransports count] > 0) {
+            [self connect];
+            return YES;
+        } else if (self.connectionAttempts < self.maxReconnectionAttempts) {
+            if (self.currentReconnectDelay < self.reconnectionLimit) {
+                NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:)]];
+                connectionCallable.target = self;
+                connectionCallable.selector = @selector(connectWithSuccess:andFailure:);
+                [connectionCallable setArgument:&_connectionBlock atIndex:2];
+                [connectionCallable setArgument:&_errorBlock atIndex:3];
+                [NSTimer scheduledTimerWithTimeInterval:self.currentReconnectDelay invocation:connectionCallable repeats:NO];
+                
+                self.currentReconnectDelay *= 2;
+                return YES;
+            }
+        }
+    }
+
+    return NO;
+}
+
 #pragma mark data sending
 - (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback
 {
@@ -182,7 +202,7 @@
     }
     
     if (callback != NULL) {
-        packet.Id = [NSString stringWithFormat:@"%d", ackCount++];
+        packet.Id = [NSString stringWithFormat:@"%d", self.ackCount++];
         [self.ackCallbacks setObject:callback forKey:packet.Id];
         packet.Id = [packet.Id stringByAppendingString:@"+"];
     }
@@ -207,7 +227,7 @@
     }
     
     packet.data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    packet.Id = [NSString stringWithFormat:@"%d", ackCount++];
+    packet.Id = [NSString stringWithFormat:@"%d", self.ackCount++];
     
     if (callback != NULL) {
         [self.ackCallbacks setObject:callback forKey:packet.Id];
@@ -277,8 +297,8 @@
 }
 - (void)heartbeatTimeout
 {
-    // TODO: Add reconnect support
     [self disconnect];
+    [self reconnect];
 }
 #pragma mark AZSocketIOTransportDelegate
 - (void)didReceiveMessage:(NSString *)message
@@ -333,10 +353,17 @@
                 NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
                 self.errorBlock(error);
             }
+            [self disconnect];
+            [self reconnect];
             break;
         default:
             break;
     }
+}
+
+- (void)didOpen
+{
+    self.connectionAttempts = 0;
 }
 
 - (void)didClose
@@ -349,7 +376,7 @@
 
 - (void)didFailWithError:(NSError *)error
 {
-    if (self.errorBlock) {
+    if (![self reconnect] && self.errorBlock) {
         self.errorBlock(error);
     }
 }

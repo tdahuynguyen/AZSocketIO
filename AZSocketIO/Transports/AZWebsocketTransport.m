@@ -65,6 +65,7 @@
 }
 - (void)disconnect
 {
+    self.connected = NO;
     [self.websocket close];
 }
 
@@ -82,9 +83,12 @@
 }
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    self.connected = NO;
-    if ([self.delegate respondsToSelector:@selector(didClose)]) {
-        [self.delegate didClose];
+    if (!self.connected) {
+        if ([self.delegate respondsToSelector:@selector(didClose)]) {
+            [self.delegate didClose];
+        }
+    } else { // Socket disconnections can be errors, but with socket.io was clean always seems to be false, so we'll check on our own
+        [self webSocket:webSocket didFailWithError:nil];
     }
 }
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error

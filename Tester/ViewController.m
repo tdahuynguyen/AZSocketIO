@@ -33,17 +33,23 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000"];
-    __weak AZSocketIO *blockSocket = socket;
+    //socket.transports = [NSMutableSet setWithObject:@"xhr-polling"];
+    __weak UIViewController *blockSelf = self;
     [socket connectWithSuccess:^{
         NSLog(@"Hurray");
         [socket setEventRecievedBlock:^(NSString *eventName, id data) {
             self.name.text = eventName;
             self.args.text = [data description];
-            [blockSocket send:@"Hi" error:nil];
+            [NSTimer scheduledTimerWithTimeInterval:1.0 target:blockSelf selector:@selector(sendTime) userInfo:nil repeats:NO];
         }];
     } andFailure:^(NSError *error) {
         NSLog(@"Boo: %@", error);
     }];
+}
+
+- (void)sendTime
+{
+    [socket send:[[NSDate new] description] error:nil];
 }
 
 - (void)viewDidUnload

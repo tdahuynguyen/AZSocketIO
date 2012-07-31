@@ -190,6 +190,26 @@ typedef void (^ACKCallback)(NSArray *args);
  */
 - (NSInteger)removeCallbacksForEvent:(NSString *)name;
 
+///-------------------------------------
+/// @name Reconnecting
+///-------------------------------------
+/**
+ Determines whether AZSocketIO will try to reconnect. Defaults to 'YES'.
+ */
+@property(nonatomic, assign)BOOL reconnect;
+/**
+ The initial delay, in seconds, before reconnecting. Defaults to '0.5'.
+ */
+@property(nonatomic, assign)NSTimeInterval reconnectionDelay;
+/**
+ The maximum delay, in seconds, before reconnecting. After the delay hits this ceiling, reconnection attempts will stop. Defaults to 'MAX_FLOAT'.
+ */
+@property(nonatomic, assign)NSTimeInterval reconnectionLimit;
+/**
+ The maximum number of reconnection attempts. Defaults to '10'.
+ */
+@property(nonatomic, assign)NSUInteger maxReconnectionAttempts;
+
 #pragma mark overridden setters
 - (void)setMessageRecievedBlock:(void (^)(id data))messageRecievedBlock;
 - (void)setEventRecievedBlock:(void (^)(NSString *eventName, id data))eventRecievedBlock;

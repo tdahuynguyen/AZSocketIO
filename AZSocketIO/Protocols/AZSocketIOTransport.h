@@ -24,7 +24,7 @@
 /**
  The `AZSocketIOTransport` protocol specifies the requirements of a transport that can be utilized by an `AZSocketIO` object.
  */
-@protocol AZSocketIOTransport
+@protocol AZSocketIOTransport <NSObject>
 @required
 
 ///---------------------------------------------
