@@ -196,7 +196,7 @@ typedef void (^ACKCallback)(NSArray *args);
 /**
  Determines whether AZSocketIO will try to reconnect. Defaults to 'YES'.
  */
-@property(nonatomic, assign)BOOL reconnect;
+@property(nonatomic, assign, getter = shouldReconnect)BOOL reconnect;
 /**
  The initial delay, in seconds, before reconnecting. Defaults to '0.5'.
  */

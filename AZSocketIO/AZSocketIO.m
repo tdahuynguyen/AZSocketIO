@@ -157,7 +157,7 @@
 
 - (BOOL)reconnect
 {
-    if (self.reconnect) {
+    if (self.shouldReconnect) {
         NSString *transportName = [self.transportMap objectForKey:[self.transport class]];
         self.availableTransports = [self.availableTransports filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             return ![transportName isEqualToString:evaluatedObject] && [self.transports containsObject:evaluatedObject];
