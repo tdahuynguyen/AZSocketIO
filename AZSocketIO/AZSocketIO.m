@@ -103,6 +103,7 @@
                              NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
                              [errorDetail setValue:@"Server handshake message could not be decoded" forKey:NSLocalizedDescriptionKey];
                              failure([NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail]);
+                             return;
                          }
                          self.sessionId = [msg objectAtIndex:0];
                          self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
