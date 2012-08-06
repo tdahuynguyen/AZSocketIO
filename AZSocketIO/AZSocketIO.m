@@ -312,10 +312,7 @@
             [self disconnect];
             break;
         case CONNECT:
-            if (self.connectionBlock) {
-                self.connectionBlock();
-                self.connectionBlock = nil;
-            }
+            self.connectionBlock();
             [self.queue setSuspended:NO];
             break;
         case HEARTBEAT:
@@ -348,14 +345,15 @@
             [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;
         case ERROR:
-            if (self.errorBlock) {
-                NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-                [errorDetail setValue:packet.data forKey:NSLocalizedDescriptionKey];
-                NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
-                self.errorBlock(error);
-            }
             [self disconnect];
-            [self reconnect];
+            if ([self reconnect]) {
+                if (self.errorBlock) {
+                    NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+                    [errorDetail setValue:packet.data forKey:NSLocalizedDescriptionKey];
+                    NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+                    self.errorBlock(error);
+                }
+            }
             break;
         default:
             break;
