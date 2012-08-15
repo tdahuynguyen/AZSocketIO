@@ -50,6 +50,8 @@
 @property(nonatomic, assign)NSInteger disconnectInterval;
 
 @property(nonatomic, assign)NSTimeInterval currentReconnectDelay;
+
+@property(nonatomic, assign, readwrite)AZSocketIOState state;
 @end
 
 @implementation AZSocketIO
@@ -76,6 +78,7 @@
         self.reconnectionDelay = .5;
         self.reconnectionLimit = MAXFLOAT;
         self.maxReconnectionAttempts = 10;
+        self.state = az_socket_not_connected;
     }
     return self;
 }
@@ -89,6 +92,7 @@
 #pragma mark connection management
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure
 {
+    self.state = az_socket_connecting;
     self.connectionBlock = success;
     self.errorBlock = failure;
     NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
@@ -151,14 +155,9 @@
     [self.transport disconnect];
 }
 
-- (BOOL)isConnected
-{
-    return self.transport && [self.transport isConnected];
-}
-
 - (BOOL)reconnect
 {
-    if (self.shouldReconnect) {
+    if (self.shouldReconnect && self.state == az_socket_not_connected) {
         NSString *transportName = [self.transportMap objectForKey:[self.transport class]];
         self.availableTransports = [self.availableTransports filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             return ![transportName isEqualToString:evaluatedObject] && [self.transports containsObject:evaluatedObject];
@@ -362,11 +361,13 @@
 
 - (void)didOpen
 {
+    self.state = az_socket_connected;
     self.connectionAttempts = 0;
 }
 
 - (void)didClose
 {
+    self.state = az_socket_not_connected;
     [self.queue setSuspended:YES];
     if (self.disconnectedBlock) {
         self.disconnectedBlock();
@@ -375,6 +376,7 @@
 
 - (void)didFailWithError:(NSError *)error
 {
+    self.state = az_socket_not_connected;
     if (![self reconnect] && self.errorBlock) {
         self.errorBlock(error);
     }

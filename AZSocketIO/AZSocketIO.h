@@ -31,6 +31,12 @@ typedef void (^ErrorBlock)(NSError *error);
 
 typedef void (^ACKCallback)(NSArray *args);
 
+typedef enum {
+    az_socket_connected,
+    az_socket_connecting,
+    az_socket_not_connected
+} AZSocketIOState;
+
 /**
  `AZSocketIO` provides a mechanism for connecting to and interacting with a socket.io compliant server. It maintains the actual transport connection and provides facilities for sending all types of messages.
  */
@@ -52,7 +58,7 @@ typedef void (^ACKCallback)(NSArray *args);
  
  @warning This property may conflict with the state of the transport during state changes.
  */
-@property(nonatomic, readonly)BOOL isConnected;
+@property(nonatomic, readonly)AZSocketIOState state;
 /**
  The set of transports the client wishes to use. Defaults to "websocket" and "xhr-polling".
  */
