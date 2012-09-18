@@ -1,8 +1,8 @@
 platform :ios
-dependency 'AFNetworking'
-dependency 'SocketRocket'
+pod 'AFNetworking'
+pod 'SocketRocket'
 
 target :test, :exclusive=>true do
-    dependency 'Kiwi'
+    pod 'Kiwi'
 end
 
