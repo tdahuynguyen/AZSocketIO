@@ -20,7 +20,6 @@
 
 #import "AZSocketIO.h"
 #import "AFHTTPClient.h"
-#import "AFJSONUtilities.h"
 #import "AZSocketIOTransport.h"
 #import "AZWebsocketTransport.h"
 #import "AZxhrTransport.h"
@@ -72,7 +71,7 @@
         [self.queue setSuspended:YES];
         
         self.transports = [NSMutableSet setWithObjects:@"websocket", @"xhr-polling", nil];
-        self.transportMap = @{ [AZWebsocketTransport class] : @"websocket", [AZxhrTransport class] : @"xhr-polling" };
+        self.transportMap = @{ @"websocket" : [AZWebsocketTransport class], @"xhr-polling" : [AZxhrTransport class] };
         
         self.reconnect = YES;
         self.reconnectionDelay = .5;
@@ -158,7 +157,7 @@
 - (BOOL)reconnect
 {
     if (self.shouldReconnect && self.state == az_socket_not_connected) {
-        NSString *transportName = [self.transportMap objectForKey:[self.transport class]];
+        NSString *transportName = [[self.transportMap allKeysForObject:[self.transport class]] lastObject];
         self.availableTransports = [self.availableTransports filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             return ![transportName isEqualToString:evaluatedObject] && [self.transports containsObject:evaluatedObject];
         }]];
@@ -189,7 +188,7 @@
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     
     if (![data isKindOfClass:[NSString class]]) {
-        NSData *jsonData = AFJSONEncode(data, error);
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:error];
         if (jsonData == nil) {
             return NO;
         }
@@ -221,7 +220,7 @@
     packet.type = EVENT;
     
     NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
-    NSData *jsonData = AFJSONEncode(data, error);
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:error];
     if (jsonData == nil) {
         return NO;
     }
@@ -324,11 +323,11 @@
             self.messageRecievedBlock(packet.data);
             break;
         case JSON_MESSAGE:
-            outData = AFJSONDecode([packet.data dataUsingEncoding:NSUTF8StringEncoding], nil);
+            outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             self.messageRecievedBlock(outData);
             break;
         case EVENT:
-            outData = AFJSONDecode([packet.data dataUsingEncoding:NSUTF8StringEncoding], nil);
+            outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
             callbackList = [self.specificEventBlocks objectForKey:[outData objectForKey:@"name"]];
             if (callbackList != nil) {
                 for (EventRecievedBlock block in callbackList) {

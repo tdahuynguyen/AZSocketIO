@@ -17,7 +17,7 @@ AZSocketIO uses cocoapods, so you shouldn't have to think too much about depende
 * [SocketRocket](https://github.com/square/SocketRocket)
 * [AFNetworking](https://github.com/AFNetworking/AFNetworking)
 
-AZSocketIO leverages AFNetworking's JSON encoding and decoding facilities, which means that you don't need anything else if you are iOS 5+. NSJSONSerialization doesn't exist on iOS 4, so you'll have to add a JSON parser there. Check [AFNetworking's docs](https://github.com/AFNetworking/AFNetworking#requirements) for more info.
+AZSocketIO uses NSJSONSerialization, so it's iOS 5+.
 
 Usage
 -----
