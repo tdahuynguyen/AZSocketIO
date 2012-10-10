@@ -26,7 +26,7 @@ describe(@"The socket", ^{
     __block AZSocketIO *socket;
     context(@"before connection", ^{
         it(@"should be constructable", ^{
-            socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000"];
+            socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000" secure:NO];
             [socket shouldNotBeNil];
         });
         it(@"should queue messages", ^{
@@ -35,7 +35,7 @@ describe(@"The socket", ^{
             [error shouldBeNil];
         });
         it(@"should say it's not connected", ^{
-            [[theValue(socket.isConnected) should] beFalse];
+            [[theValue(socket.state) should] equal:@(az_socket_not_connected)];
         });
     });
     context(@"when connecting", ^{
@@ -56,7 +56,7 @@ describe(@"The socket", ^{
             [[expectFutureValue(args) shouldEventually] beNonNil];
         });
         it(@"should say it's connected", ^{
-            [[theValue(socket.isConnected) should] beTrue];
+            [[theValue(socket.state) should] equal:@(az_socket_connected)];
         });
     });
     context(@"after connecting", ^{
@@ -134,7 +134,7 @@ describe(@"The socket", ^{
     });
     context(@"after disconnecting", ^{
         it(@"should say it's not connected", ^{
-            [[theValue(socket.isConnected) should] beFalse];
+            [[theValue(socket.state) should] equal:@(az_socket_not_connected)];
         });
         __block NSString *sent = @"Hi", *recieved;
         it(@"can still queue messages", ^{
