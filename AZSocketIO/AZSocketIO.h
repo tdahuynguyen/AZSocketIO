@@ -44,15 +44,15 @@ typedef enum {
 /**
  The hostname of the socket.io server
  */
-@property(nonatomic, strong)NSString *host;
+@property(nonatomic, strong, readonly)NSString *host;
 /**
  The port the socket.io server is running on
  */
-@property(nonatomic, strong)NSString *port;
+@property(nonatomic, strong, readonly)NSString *port;
 /**
  Determines whether AZSocketIO will use secured connections such as wss or https
  */
-@property(nonatomic, assign)BOOL secureConnections;
+@property(nonatomic, assign, readonly)BOOL secureConnections;
 /**
  Contains the current state of the connection.
  
@@ -92,10 +92,11 @@ typedef enum {
  
  @param host The hostname of socket.io server.
  @param port The port the socket.io server is running on.
+ @param secureConnections Determines whether SSL encryption is used when possible
  
  @return the initialized client
  */
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port;
+- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections;
 
 /**
  Connects to the socket.io server.

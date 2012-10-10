@@ -28,6 +28,10 @@
 #define PROTOCOL_VERSION @"1"
 
 @interface AZSocketIO ()
+@property(nonatomic, strong, readwrite)NSString *host;
+@property(nonatomic, strong, readwrite)NSString *port;
+@property(nonatomic, assign, readwrite)BOOL secureConnections;
+
 @property(nonatomic, strong)NSOperationQueue *queue;
 
 @property(nonatomic, strong)ConnectedBlock connectionBlock;
@@ -55,14 +59,19 @@
 
 @implementation AZSocketIO
 
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port
+- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections
 {
     self = [super init];
     if (self) {
         self.host = host;
         self.port = port;
-        self.secureConnections = NO;
-        self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:nil];
+        self.secureConnections = secureConnections;
+        
+        NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
+        NSString *urlString = [NSString stringWithFormat:@"%@%@:%@", protocolString,
+                               self.host, self.port];
+        
+        self.httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
         self.ackCallbacks = [NSMutableDictionary dictionary];       
         self.ackCount = 0;
         self.specificEventBlocks = [NSMutableDictionary new];
@@ -94,9 +103,7 @@
     self.state = az_socket_connecting;
     self.connectionBlock = success;
     self.errorBlock = failure;
-    NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
-    NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/%@", protocolString,
-                           self.host, self.port, PROTOCOL_VERSION];
+    NSString *urlString = [NSString stringWithFormat:@"socket.io/%@", PROTOCOL_VERSION];
     [self.httpClient getPath:urlString
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {

@@ -25,23 +25,37 @@
 @end
 
 @implementation ViewController
-@synthesize socket;
-@synthesize name;
-@synthesize args;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000"];
+    __weak ViewController *blockSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      [blockSelf setupConn];
+                                                  }];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupConn];
+}
+
+- (void)setupConn
+{
+    __weak ViewController *blockSelf = self;
+    self.socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000" secure:NO];
     //socket.transports = [NSMutableSet setWithObject:@"xhr-polling"];
-    __weak UIViewController *blockSelf = self;
-    [socket connectWithSuccess:^{
+    [self.socket setEventRecievedBlock:^(NSString *eventName, id data) {
+        blockSelf.name.text = eventName;
+        blockSelf.args.text = [data description];
+        [NSTimer scheduledTimerWithTimeInterval:1 target:blockSelf selector:@selector(sendTime) userInfo:nil repeats:NO];
+    }];
+    [self.socket connectWithSuccess:^{
         NSLog(@"Hurray");
-        [socket setEventRecievedBlock:^(NSString *eventName, id data) {
-            self.name.text = eventName;
-            self.args.text = [data description];
-            [NSTimer scheduledTimerWithTimeInterval:1.0 target:blockSelf selector:@selector(sendTime) userInfo:nil repeats:NO];
-        }];
     } andFailure:^(NSError *error) {
         NSLog(@"Boo: %@", error);
     }];
@@ -49,7 +63,7 @@
 
 - (void)sendTime
 {
-    [socket send:[[NSDate new] description] error:nil];
+    [self.socket send:[[NSDate new] description] error:nil];
 }
 
 - (void)viewDidUnload
