@@ -119,8 +119,10 @@
                          self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
                          self.disconnectInterval = [[msg objectAtIndex:2] intValue];
                          self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
+                         self.currentReconnectDelay = self.reconnectionDelay;
                          [self connect];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                         self.state = az_socket_not_connected;
                          if (![self reconnect]) {
                              failure(error);
                          }
@@ -159,6 +161,7 @@
 {
     [self clearHeartbeatTimeout];
     [self.transport disconnect];
+    self.state = az_socket_not_connected;
 }
 
 - (BOOL)reconnect
@@ -173,6 +176,7 @@
             return YES;
         } else if (self.connectionAttempts < self.maxReconnectionAttempts) {
             if (self.currentReconnectDelay < self.reconnectionLimit) {
+                NSLog(@"Reconnecting after %f", self.currentReconnectDelay);
                 NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:)]];
                 connectionCallable.target = self;
                 connectionCallable.selector = @selector(connectWithSuccess:andFailure:);
@@ -354,7 +358,7 @@
             break;
         case ERROR:
             [self disconnect];
-            if ([self reconnect]) {
+            if (![self reconnect]) {
                 if (self.errorBlock) {
                     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
                     [errorDetail setValue:packet.data forKey:NSLocalizedDescriptionKey];
