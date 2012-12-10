@@ -22,7 +22,7 @@
 #import "AZSocketIOTransportDelegate.h"
 
 @interface AZWebsocketTransport ()
-@property(nonatomic, strong)id<AZSocketIOTransportDelegate> delegate;
+@property(nonatomic, weak)id<AZSocketIOTransportDelegate> delegate;
 @property(nonatomic, readwrite, assign)BOOL connected;
 @end
 
@@ -51,6 +51,11 @@
         self.websocket.delegate = self;
     }
     return self;
+}
+- (void)dealloc
+{
+    [self disconnect];
+    self.websocket.delegate = nil;
 }
 - (void)connect
 {

@@ -24,7 +24,7 @@
 #import "AZSocketIOTransportDelegate.h"
 
 @interface AZxhrTransport ()
-@property(nonatomic, strong)id<AZSocketIOTransportDelegate> delegate;
+@property(nonatomic, weak)id<AZSocketIOTransportDelegate> delegate;
 @property(nonatomic, readwrite, assign)BOOL connected;
 @end
 
