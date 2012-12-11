@@ -15,9 +15,7 @@ io.sockets.on('connection', function (socket) {
     fn(data);
   });
 
-	socket.on('ackWithoutArgs', function (data, fn) {
-		fn();
-	});
+
 	
 	socket.on('ackWithArgs', function(first, second, fn) {
 		fn(first, second);

@@ -58,7 +58,10 @@
 @end
 
 @implementation AZSocketIO
-
+- (void)dealloc
+{
+    NSLog(@"Socket");
+}
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections
 {
     self = [super init];
@@ -196,6 +199,16 @@
 #pragma mark data sending
 - (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback
 {
+    return [self send:data error:error ack:callback argCount:0];
+}
+
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ackWithArgs:(ACKCallbackWithArgs)callback
+{
+    return [self send:data error:error ack:callback argCount:1];
+}
+
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(id)callback argCount:(NSUInteger)argCount
+{
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     
     if (![data isKindOfClass:[NSString class]]) {
@@ -214,7 +227,9 @@
     if (callback != NULL) {
         packet.Id = [NSString stringWithFormat:@"%d", self.ackCount++];
         [self.ackCallbacks setObject:callback forKey:packet.Id];
-        packet.Id = [packet.Id stringByAppendingString:@"+"];
+        if (argCount > 0) {
+            packet.Id = [packet.Id stringByAppendingString:@"+"];
+        }
     }
     
     return [self sendPacket:packet error:error];
@@ -226,6 +241,16 @@
 }
 
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(ACKCallback)callback
+{
+    return [self emit:name args:args error:error ack:callback argCount:0];
+}
+
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ackWithArgs:(ACKCallbackWithArgs)callback
+{
+    return [self emit:name args:args error:error ack:callback argCount:1];
+}
+
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(id)callback argCount:(NSUInteger)argCount
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
@@ -241,7 +266,9 @@
     
     if (callback != NULL) {
         [self.ackCallbacks setObject:callback forKey:packet.Id];
-        packet.Id = [packet.Id stringByAppendingString:@"+"];
+        if (argCount > 0) {
+            packet.Id = [packet.Id stringByAppendingString:@"+"];
+        }
     }
     
     return [self sendPacket:packet error:error];
@@ -352,7 +379,11 @@
             ackMessage = [[AZSocketIOACKMessage alloc] initWithPacket:packet];
             callback = [self.ackCallbacks objectForKey:ackMessage.messageId];
             if (callback != NULL) {
-                callback(ackMessage.args);
+                if (ackMessage.args.count > 0) {
+                    callback(ackMessage.args);
+                } else {
+                    callback();
+                }
             }
             [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;

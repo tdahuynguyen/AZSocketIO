@@ -95,17 +95,17 @@ describe(@"The socket", ^{
             __block NSString *name;
             [socket emit:@"ackWithArg" args:@"kthx"
                    error:nil
-                     ack:^(NSArray *args) {
-                         name = [args objectAtIndex:0];
-                     }];
+             ackWithArgs:^(NSArray *args) {
+                 name = [args objectAtIndex:0];
+             }];
             [[expectFutureValue(name) shouldEventually] equal:@"kthx"];
         });
         it(@"can recieve an empty ack callback", ^{
-            __block BOOL empty;
+            __block BOOL empty = NO;
             [socket emit:@"ackWithoutArgs" args:@"never going to see this"
                    error:nil
-                     ack:^(NSArray *args) {
-                         empty = (args == nil);
+                     ack:^() {
+                         empty = YES;
                      }];
             [[expectFutureValue(theValue(empty)) shouldEventually] beTrue];
         });
@@ -114,10 +114,10 @@ describe(@"The socket", ^{
             __block NSString *two;
             [socket emit:@"ackWithArgs" args:[NSArray arrayWithObjects:@"one", @"two", nil]
                    error:nil
-                     ack:^(NSArray *args) {
-                         one = [args objectAtIndex:0];
-                         two = [args objectAtIndex:1];
-                     }];
+             ackWithArgs:^(NSArray *args) {
+                 one = [args objectAtIndex:0];
+                 two = [args objectAtIndex:1];
+             }];
             [[expectFutureValue(one) shouldEventually] equal:@"one"];
             [[expectFutureValue(two) shouldEventually] equal:@"two"];
         });

@@ -29,7 +29,8 @@ typedef void (^ConnectedBlock)();
 typedef void (^DisconnectedBlock)();
 typedef void (^ErrorBlock)(NSError *error);
 
-typedef void (^ACKCallback)(NSArray *args);
+typedef void (^ACKCallback)();
+typedef void (^ACKCallbackWithArgs)(NSArray *args);
 
 typedef enum {
     az_socket_connected,
@@ -131,11 +132,24 @@ typedef enum {
  
  @param data The data to be sent to the socket.io server. If this data is not an `NSString`, the data will be encoded as JSON.
  @param error If there is a problem encoding the message, upon return contains an instance of NSError that describes the problem.
+ @param callback A block that will be executed using the ACK args from the socket.io server.
+ 
+ @return `YES` if the message was dispatched immediately, `NO` if it was queued.
+ */
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ackWithArgs:(void (^)(NSArray *data))callback;
+
+/**
+ Sends a normal message to the socket.io server.
+ 
+ This functions identically to the socket.io javascript client. For discussion of that, see the [socket.io readme](https://github.com/learnboost/socket.io#getting-acknowledgements).
+ 
+ @param data The data to be sent to the socket.io server. If this data is not an `NSString`, the data will be encoded as JSON.
+ @param error If there is a problem encoding the message, upon return contains an instance of NSError that describes the problem.
  @param callback A block that will be executed using the ACK from the socket.io server.
  
  @return `YES` if the message was dispatched immediately, `NO` if it was queued.
  */
-- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(void (^)(NSArray *data))callback;
+- (BOOL)send:(id)data error:(NSError *__autoreleasing *)error ack:(void (^)())callback;
 
 /**
  Emits a namespaced message to the socket.io server.
@@ -156,11 +170,25 @@ typedef enum {
  @param name The name of the event.
  @param args The arguements to emit with the event.
  @param error If there is a problem encoding the message, upon return contains an instance of NSError that describes the problem.
+ @param callback A block that will be executed using the ACK args from the socket.io server.
+ 
+ @return `YES` if the message was dispatched immediately, `NO` if it was queued.
+ */
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ackWithArgs:(void (^)(NSArray *data))callback;
+
+/**
+ Emits a namespaced message to the socket.io server.
+ 
+ This functions identically to the socket.io javascript client. For discussion of that, see the [socket.io readme](https://github.com/learnboost/socket.io#getting-acknowledgements).
+ 
+ @param name The name of the event.
+ @param args The arguements to emit with the event.
+ @param error If there is a problem encoding the message, upon return contains an instance of NSError that describes the problem.
  @param callback A block that will be executed using the ACK from the socket.io server.
  
  @return `YES` if the message was dispatched immediately, `NO` if it was queued.
  */
-- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(void (^)(NSArray *data))callback;
+- (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(void (^)())callback;
 
 ///-------------------------------------
 /// @name Routing Events From the Server
