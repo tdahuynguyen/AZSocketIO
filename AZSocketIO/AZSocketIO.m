@@ -37,7 +37,6 @@
 @property(nonatomic, strong)ConnectedBlock connectionBlock;
 
 @property(nonatomic, strong)AFHTTPClient *httpClient;
-@property(nonatomic, strong)id<AZSocketIOTransport> transport;
 @property(nonatomic, strong)NSDictionary *transportMap;
 
 @property(nonatomic, strong)NSMutableDictionary *ackCallbacks;

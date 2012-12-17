@@ -21,6 +21,8 @@
 #import <Foundation/Foundation.h>
 #import "AZsocketIOTransportDelegate.h"
 
+@protocol AZSocketIOTransport;
+
 #define AZDOMAIN @"AZSocketIO"
 
 typedef void (^MessageRecievedBlock)(id data);
@@ -64,6 +66,10 @@ typedef enum {
  The set of transports the client wishes to use. Defaults to "websocket" and "xhr-polling".
  */
 @property(nonatomic, strong)NSMutableSet *transports;
+/**
+ The currently active transport, if one exists.
+ */
+@property(nonatomic, strong)id<AZSocketIOTransport> transport;
 
 /**
  This block will be called on the reception of any non-protocol message.
