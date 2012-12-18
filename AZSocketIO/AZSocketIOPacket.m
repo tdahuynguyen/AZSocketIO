@@ -41,7 +41,7 @@
                                                                               range:NSMakeRange(0, [packetString length])];
         
         NSString *typeString = [packetString substringWithRange:[result rangeAtIndex:1]];
-        self.type = [typeString intValue];
+        self.type = typeString.length == 0 ? -1 : [typeString intValue];
         self.Id = [AZSocketIOPacket captureOrEmptyString:packetString range:[result rangeAtIndex:2]];
         
         self.ack = NO;
