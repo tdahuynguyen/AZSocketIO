@@ -57,10 +57,6 @@
 @end
 
 @implementation AZSocketIO
-- (void)dealloc
-{
-    NSLog(@"Socket");
-}
 - (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections
 {
     self = [super init];
