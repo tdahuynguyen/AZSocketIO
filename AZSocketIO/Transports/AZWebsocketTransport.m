@@ -55,7 +55,6 @@
 - (void)dealloc
 {
     [self disconnect];
-    self.websocket.delegate = nil;
 }
 - (void)connect
 {
@@ -70,8 +69,11 @@
 }
 - (void)disconnect
 {
-    self.connected = NO;
+    self.websocket.delegate = nil;
     [self.websocket close];
+    self.websocket = nil;
+    [self webSocket:self.websocket didCloseWithCode:0 reason:@"Client requested disconnect" wasClean:YES];
+    self.connected = NO;
 }
 
 #pragma mark SRWebSocketDelegate
