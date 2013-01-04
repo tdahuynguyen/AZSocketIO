@@ -416,6 +416,7 @@
 - (void)didFailWithError:(NSError *)error
 {
     self.state = az_socket_not_connected;
+    [self.queue setSuspended:YES];
     if (![self reconnect] && self.errorBlock) {
         self.errorBlock(error);
     }
