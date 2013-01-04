@@ -90,7 +90,7 @@
 }
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    if (!self.connected) {
+    if (!self.connected || wasClean) {
         if ([self.delegate respondsToSelector:@selector(didClose)]) {
             [self.delegate didClose];
         }

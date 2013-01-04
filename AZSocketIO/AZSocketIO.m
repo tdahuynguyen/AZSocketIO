@@ -158,8 +158,8 @@
 - (void)disconnect
 {
     [self clearHeartbeatTimeout];
-    [self.transport disconnect];
     self.state = az_socket_not_connected;
+    [self.transport disconnect];
 }
 
 - (BOOL)reconnect
