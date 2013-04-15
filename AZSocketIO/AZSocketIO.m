@@ -110,7 +110,7 @@
                          if ([msg count] < 4) {
                              NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
                              [errorDetail setValue:@"Server handshake message could not be decoded" forKey:NSLocalizedDescriptionKey];
-                             failure([NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail]);
+                             failure([NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail]);
                              return;
                          }
                          self.sessionId = [msg objectAtIndex:0];
@@ -139,7 +139,7 @@
     
     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
     [errorDetail setValue:@"None of the available transports are recognized by this server" forKey:NSLocalizedDescriptionKey];
-    NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+    NSError *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail];
     self.errorBlock(error);
 }
 
@@ -249,6 +249,12 @@
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
+
+    if (![NSJSONSerialization isValidJSONObject:args]) {
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The provided args can't be converted to JSON"};
+        *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorArgs userInfo:userInfo];
+        return NO;
+    }
     
     NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:error];
@@ -388,7 +394,7 @@
                 if (self.errorBlock) {
                     NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
                     [errorDetail setValue:packet.data forKey:NSLocalizedDescriptionKey];
-                    NSError *error = [NSError errorWithDomain:AZDOMAIN code:100 userInfo:errorDetail];
+                    NSError *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail];
                     self.errorBlock(error);
                 }
             }
