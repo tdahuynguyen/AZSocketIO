@@ -34,10 +34,13 @@ typedef void (^ErrorBlock)(NSError *error);
 typedef void (^ACKCallback)();
 typedef void (^ACKCallbackWithArgs)(NSArray *args);
 
+/** 
+ The socket state according to socket.io specs ( https://github.com/LearnBoost/socket.io-spec#anatomy-of-a-socketio-socket )
+ */
 typedef enum {
-    az_socket_connected,
+    az_socket_disconnected,
     az_socket_connecting,
-    az_socket_not_connected
+    az_socket_connected,
 } AZSocketIOState;
 
 NS_ENUM(NSUInteger, AZSocketIOError) {

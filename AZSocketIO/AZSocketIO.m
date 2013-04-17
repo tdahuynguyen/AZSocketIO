@@ -84,7 +84,7 @@
         self.reconnectionDelay = .5;
         self.reconnectionLimit = MAXFLOAT;
         self.maxReconnectionAttempts = 10;
-        self.state = az_socket_not_connected;
+        self.state = az_socket_disconnected;
     }
     return self;
 }
@@ -120,7 +120,7 @@
                          self.currentReconnectDelay = self.reconnectionDelay;
                          [self connect];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                         self.state = az_socket_not_connected;
+                         self.state = az_socket_disconnected;
                          if (![self reconnect]) {
                              failure(error);
                          }
@@ -158,13 +158,13 @@
 - (void)disconnect
 {
     [self clearHeartbeatTimeout];
-    self.state = az_socket_not_connected;
+    self.state = az_socket_disconnected;
     [self.transport disconnect];
 }
 
 - (BOOL)reconnect
 {
-    if (self.shouldReconnect && self.state == az_socket_not_connected) {
+    if (self.shouldReconnect && self.state == az_socket_disconnected) {
         NSString *transportName = [[self.transportMap allKeysForObject:[self.transport class]] lastObject];
         self.availableTransports = [self.availableTransports filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
             return ![transportName isEqualToString:evaluatedObject] && [self.transports containsObject:evaluatedObject];
@@ -415,7 +415,7 @@
 
 - (void)didClose
 {
-    self.state = az_socket_not_connected;
+    self.state = az_socket_disconnected;
     [self.queue setSuspended:YES];
     if (self.disconnectedBlock) {
         self.disconnectedBlock();
@@ -424,7 +424,7 @@
 
 - (void)didFailWithError:(NSError *)error
 {
-    self.state = az_socket_not_connected;
+    self.state = az_socket_disconnected;
     [self.queue setSuspended:YES];
     if (![self reconnect] && self.errorBlock) {
         self.errorBlock(error);

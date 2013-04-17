@@ -35,7 +35,7 @@ describe(@"The socket", ^{
             [error shouldBeNil];
         });
         it(@"should say it's not connected", ^{
-            [[theValue(socket.state) should] equal:@(az_socket_not_connected)];
+            [[theValue(socket.state) should] equal:@(az_socket_disconnected)];
         });
     });
     context(@"when connecting", ^{
@@ -134,7 +134,7 @@ describe(@"The socket", ^{
     });
     context(@"after disconnecting", ^{
         it(@"should say it's not connected", ^{
-            [[theValue(socket.state) should] equal:@(az_socket_not_connected)];
+            [[theValue(socket.state) should] equal:@(az_socket_disconnected)];
         });
         __block NSString *sent = @"Hi", *recieved;
         it(@"can still queue messages", ^{
