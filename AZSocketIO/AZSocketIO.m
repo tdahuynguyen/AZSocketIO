@@ -250,7 +250,7 @@
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
 
-    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
+    NSDictionary *data = @{ @"name" : name, @"args" : args};
     
     if (![NSJSONSerialization isValidJSONObject:data]) {
         if (error) {
