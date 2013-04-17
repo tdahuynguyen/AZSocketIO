@@ -39,6 +39,7 @@ typedef void (^ACKCallbackWithArgs)(NSArray *args);
  */
 typedef enum {
     AZSocketIOStateDisconnected,
+    AZSocketIOStateDisconnecting,
     AZSocketIOStateConnecting,
     AZSocketIOStateConnected,
 } AZSocketIOState;

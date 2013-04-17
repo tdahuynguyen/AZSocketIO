@@ -158,7 +158,7 @@
 - (void)disconnect
 {
     [self clearHeartbeatTimeout];
-    self.state = AZSocketIOStateDisconnected;
+    self.state = AZSocketIOStateDisconnecting;
     [self.transport disconnect];
 }
 
