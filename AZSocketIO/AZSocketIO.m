@@ -250,7 +250,9 @@
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
 
-    if (![NSJSONSerialization isValidJSONObject:args]) {
+    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
+    
+    if (![NSJSONSerialization isValidJSONObject:data]) {
         if (error) {
             NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The provided args can't be converted to JSON"};
             *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorArgs userInfo:userInfo];
@@ -258,7 +260,6 @@
         return NO;
     }
     
-    NSMutableDictionary *data = [NSMutableDictionary dictionaryWithObjectsAndKeys:name, @"name", args, @"args", nil];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:0 error:error];
     if (jsonData == nil) {
         return NO;
