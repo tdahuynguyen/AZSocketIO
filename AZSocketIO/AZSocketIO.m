@@ -251,8 +251,10 @@
     packet.type = EVENT;
 
     if (![NSJSONSerialization isValidJSONObject:args]) {
-        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The provided args can't be converted to JSON"};
-        *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorArgs userInfo:userInfo];
+        if (error) {
+            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"The provided args can't be converted to JSON"};
+            *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorArgs userInfo:userInfo];
+        }
         return NO;
     }
     
