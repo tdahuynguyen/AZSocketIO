@@ -240,6 +240,15 @@ NS_ENUM(NSUInteger, AZSocketIOError) {
  */
 - (NSInteger)removeCallbacksForEvent:(NSString *)name;
 
+/**
+ Returns all the callbacks for a particular event
+ 
+ @param eventName the name of the event.
+ 
+ @return An `NSArray` containing all the callback blocks, `nil` if no callback blocks exists.
+ */
+- (NSArray *)callbacksForEvent:(NSString *)eventName;
+
 /*!
  @method setValue:forHTTPHeaderField:
  @abstract Sets the value of the given HTTP header field.

@@ -91,6 +91,18 @@ describe(@"The socket", ^{
             [[expectFutureValue(recievedName) shouldEventually] equal:name];
             [[expectFutureValue(recievedArgs) shouldEventually] equal:args];
         });
+        it(@"can add and retrive and event callback", ^{
+            NSString *eventName = @"testEvent";
+            [socket addCallbackForEventName:eventName
+                                   callback:^(NSString *eventName, id data) {
+                                       
+                                   }];
+            
+            NSArray *callbacks = [socket callbacksForEvent:eventName];
+            [callbacks shouldNotBeNil];
+            [[callbacks should] beKindOfClass:[NSArray class]];
+            [[theValue(callbacks.count) should] equal:theValue(1)];
+        });
         it(@"can register an ack callback", ^{
             __block NSString *name;
             [socket emit:@"ackWithArg" args:@"kthx"

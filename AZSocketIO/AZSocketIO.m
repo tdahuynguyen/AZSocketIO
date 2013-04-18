@@ -292,6 +292,7 @@
 }
 
 #pragma mark event callback registration
+
 - (void)addCallbackForEventName:(NSString *)name callback:(EventRecievedBlock)block
 {
     NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
@@ -301,6 +302,7 @@
     }
     [callbacks addObject:block];
 }
+
 - (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventRecievedBlock)block
 {
     NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
@@ -315,15 +317,23 @@
     }
     return NO;
 }
+
 - (NSInteger)removeCallbacksForEvent:(NSString *)name
 {
     NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
     [self.specificEventBlocks removeObjectForKey:name];
     return [callbacks count];
 }
+
+- (NSArray *)callbacksForEvent:(NSString *)eventName
+{
+    return [[self.specificEventBlocks objectForKey:eventName] copy];
+}
+
 - (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field {
     [self.httpClient setDefaultHeader:field value:value];
 }
+
 #pragma mark heartbeat
 - (void)clearHeartbeatTimeout
 {
