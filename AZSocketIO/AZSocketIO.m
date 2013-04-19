@@ -372,7 +372,9 @@
             [self.transport send:message];
             break;
         case MESSAGE:
-            self.messageRecievedBlock(packet.data);
+            if (self.messageRecievedBlock) {
+                self.messageRecievedBlock(packet.data);
+            }
             break;
         case JSON_MESSAGE:
         {
@@ -422,7 +424,9 @@
 
 - (void)didParseJSONMessage:(id)outData
 {
-    self.messageRecievedBlock(outData);
+    if (self.messageRecievedBlock) {
+        self.messageRecievedBlock(outData);
+    }
 }
 
 - (void)didParseJSONEvent:(id)outData
@@ -433,7 +437,9 @@
             block([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
         }
     } else {
-        self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+        if (self.eventRecievedBlock) {
+            self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+        }
     }
 }
 
