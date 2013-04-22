@@ -26,5 +26,9 @@ io.sockets.on('connection', function (socket) {
 var test = io
 	.of('/test')
 	.on('connection', function(socket){
-		socket.emit('namspaced_event', {namespace : 'test'});
+		socket.emit('namespaced_event', {namespace : 'test'});
+		
+		socket.on('test_event', function(msg){
+			socket.emit('test_event',msg);
+		})
 })

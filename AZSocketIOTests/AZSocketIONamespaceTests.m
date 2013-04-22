@@ -46,10 +46,43 @@ describe(@"The socket", ^{
             
         });
         it(@"recieves an initial event", ^{
-            [[expectFutureValue(name) shouldEventually] equal:@"namspaced_event"];
+            [[expectFutureValue(name) shouldEventually] equal:@"namespaced_event"];
         });
         it(@"should say it's connected", ^{
             [[theValue(socket.state) should] equal:@(AZSocketIOStateConnected)];
+        });
+    });
+    
+    context(@"after connecting", ^{
+        it(@"can emit an event and recieve the return val", ^{
+            __block NSString *name = @"test_event";
+            __block NSArray *args = [NSArray arrayWithObject:@"bar"];
+            __block NSString *recievedName;
+            __block NSArray *recievedArgs;
+            [socket addCallbackForEventName:name callback:^(NSString *eventName, id data) {
+                recievedName = eventName;
+                recievedArgs = data;
+            }];
+            [socket emit:name args:args error:nil];
+            [[expectFutureValue(recievedName) shouldEventually] equal:name];
+            [[expectFutureValue(recievedArgs) shouldEventually] equal:args];
+        });
+    });
+    
+    context(@"when disconnecting", ^{
+        it(@"can disconnect", ^{
+            __block BOOL disconnected = FALSE;
+            [socket setDisconnectedBlock:^{
+                disconnected = TRUE;
+            }];
+            [socket disconnect];
+            [[expectFutureValue(theValue(disconnected)) shouldEventually] beTrue];
+        });
+    });
+    
+    context(@"after disconnecting", ^{
+        it(@"should say it's not connected", ^{
+            [[theValue(socket.state) should] equal:@(AZSocketIOStateDisconnected)];
         });
     });
 });
