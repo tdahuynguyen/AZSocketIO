@@ -1,5 +1,6 @@
 var io = require('socket.io').listen(9000);
 
+
 io.sockets.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
 
@@ -21,3 +22,9 @@ io.sockets.on('connection', function (socket) {
 		fn(first, second);
 	});
 });
+
+var test = io
+	.of('/test')
+	.on('connection', function(socket){
+		socket.emit('namspaced_event', {namespace : 'test'});
+})
