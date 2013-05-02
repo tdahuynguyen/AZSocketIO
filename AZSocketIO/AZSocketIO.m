@@ -274,8 +274,14 @@ NSString * const AZSocketIODefaultNamespace = @"";
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
     packet.type = EVENT;
-
-    NSDictionary *data = @{ @"name" : name, @"args" : args};
+    
+    NSDictionary *data = nil;
+    
+    if (args) {
+        data = @{ @"name" : name, @"args" : args};
+    } else {
+        data = @{ @"name" : name};
+    }
     
     if (![NSJSONSerialization isValidJSONObject:data]) {
         if (error) {
