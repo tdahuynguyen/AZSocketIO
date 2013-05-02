@@ -133,6 +133,13 @@ describe(@"The socket", ^{
             [[expectFutureValue(one) shouldEventually] equal:@"one"];
             [[expectFutureValue(two) shouldEventually] equal:@"two"];
         });
+        // https://github.com/pashields/AZSocketIO/issues/10
+        it(@"should be able to emit with nil args", ^{
+            [socket emit:@"foobar"
+                    args:nil
+                   error:nil
+                     ack:nil];
+        });
     });
     context(@"when disconnecting", ^{
         it(@"can disconnect", ^{
