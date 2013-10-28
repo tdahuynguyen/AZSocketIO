@@ -325,7 +325,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 #pragma mark event callback registration
 
-- (void)addCallbackForEventName:(NSString *)name callback:(EventRecievedBlock)block
+- (void)addCallbackForEventName:(NSString *)name callback:(EventReceivedBlock)block
 {
     NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
     if (callbacks == nil) {
@@ -335,7 +335,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     [callbacks addObject:block];
 }
 
-- (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventRecievedBlock)block
+- (BOOL)removeCallbackForEvent:(NSString *)name callback:(EventReceivedBlock)block
 {
     NSMutableArray *callbacks = [self.specificEventBlocks objectForKey:name];
     if (callbacks != nil) {
@@ -419,8 +419,8 @@ NSString * const AZSocketIODefaultNamespace = @"";
             [self.transport send:message];
             break;
         case MESSAGE:
-            if (self.messageRecievedBlock) {
-                self.messageRecievedBlock(packet.data);
+            if (self.messageReceivedBlock) {
+                self.messageReceivedBlock(packet.data);
             }
             break;
         case JSON_MESSAGE:
@@ -497,8 +497,8 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 - (void)didParseJSONMessage:(id)outData
 {
-    if (self.messageRecievedBlock) {
-        self.messageRecievedBlock(outData);
+    if (self.messageReceivedBlock) {
+        self.messageReceivedBlock(outData);
     }
 }
 
@@ -506,12 +506,12 @@ NSString * const AZSocketIODefaultNamespace = @"";
 {
     NSArray *callbackList = [self.specificEventBlocks objectForKey:[outData objectForKey:@"name"]];
     if (callbackList != nil) {
-        for (EventRecievedBlock block in callbackList) {
+        for (EventReceivedBlock block in callbackList) {
             block([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
         }
     } else {
-        if (self.eventRecievedBlock) {
-            self.eventRecievedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
+        if (self.eventReceivedBlock) {
+            self.eventReceivedBlock([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
         }
     }
 }
