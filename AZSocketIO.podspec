@@ -8,7 +8,20 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/pashields/AZSocketIO.git', :tag => 'v0.0.3' }
   s.source_files = 'AZSocketIO/*.{h,m}', 'AZSocketIO/Protocols/*.{h,m}', 'AZSocketIO/Transports/*.{h,m}'
   s.dependency 'SocketRocket'
-  s.dependency 'AFNetworking'
+  s.dependency 'AFNetworking', '~>1.x'
   s.requires_arc = true
   s.platform = :ios, 5.0
+  s.prefix_header_contents = <<-EOS
+#import <Availability.h>
+
+#if __IPHONE_OS_VERSION_MIN_REQUIRED
+  #import <SystemConfiguration/SystemConfiguration.h>
+  #import <MobileCoreServices/MobileCoreServices.h>
+  #import <Security/Security.h>
+#else
+  #import <SystemConfiguration/SystemConfiguration.h>
+  #import <CoreServices/CoreServices.h>
+  #import <Security/Security.h>
+#endif
+EOS
 end
