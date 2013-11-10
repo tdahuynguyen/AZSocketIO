@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.authors  = {'Patrick Shields' => 'patrick.m.shields@gmail.com'}
   s.source   = { :git => 'https://github.com/pashields/AZSocketIO.git', :tag => 'v0.0.3' }
   s.source_files = 'AZSocketIO/*.{h,m}', 'AZSocketIO/Protocols/*.{h,m}', 'AZSocketIO/Transports/*.{h,m}'
-  s.dependency 'SocketRocket'
+  s.dependency 'SocketRocket', '~0.x'
   s.dependency 'AFNetworking', '~>1.x'
   s.requires_arc = true
   s.platform = :ios, 5.0
