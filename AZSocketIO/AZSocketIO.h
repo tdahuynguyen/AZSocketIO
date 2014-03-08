@@ -19,7 +19,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AZsocketIOTransportDelegate.h"
+#import "AZSocketIOTransportDelegate.h"
 
 @protocol AZSocketIOTransport;
 
