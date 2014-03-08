@@ -103,6 +103,32 @@ describe(@"The socket", ^{
             [[callbacks should] beKindOfClass:[NSArray class]];
             [[theValue(callbacks.count) should] equal:theValue(1)];
         });
+        it(@"can add an event callback and remove when receiving event", ^{
+            NSString *eventName = @"Oh happy day.";
+            
+            __block NSDictionary *sent = [NSDictionary dictionaryWithObject:@"bar" forKey:@"foo"];;
+            __block NSDictionary *received;
+            
+            EventReceivedBlock __block callback = ^(NSString *eventName, id data) {
+                received = [data objectAtIndex:0];
+                [socket removeCallbackForEvent:eventName callback:callback];
+            };
+            
+            [socket addCallbackForEventName:eventName callback:^(NSString *eventName, id data) {}];
+            [socket addCallbackForEventName:eventName
+                                   callback:callback];
+            [socket addCallbackForEventName:eventName callback:^(NSString *eventName, id data) {}];
+            
+            NSArray *callbacks = [socket callbacksForEvent:eventName];
+            [callbacks shouldNotBeNil];
+            [[callbacks should] beKindOfClass:[NSArray class]];
+            [[theValue(callbacks.count) should] equal:theValue(3)];
+            
+            [socket send:sent error:nil];
+            [[expectFutureValue(received) shouldEventually] equal:sent];
+            
+            [socket removeCallbacksForEvent:eventName];
+        });
         it(@"can register an ack callback", ^{
             __block NSString *name;
             [socket emit:@"ackWithArg" args:@"kthx"

@@ -506,7 +506,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 {
     NSArray *callbackList = [self.specificEventBlocks objectForKey:[outData objectForKey:@"name"]];
     if (callbackList != nil) {
-        for (EventReceivedBlock block in callbackList) {
+        for (EventReceivedBlock block in [callbackList copy]) {
             block([outData objectForKey:@"name"], [outData objectForKey:@"args"]);
         }
     } else {
