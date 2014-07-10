@@ -8,7 +8,7 @@
   "os": [ "linux", "darwin" ],
   "dependencies": {
 	"coffee-script":">=1.2.0",
-	"socket.io":">=0.7.0"
+	"socket.io":" ~>0.9.x"
   },
   "engines": { "node":  ">=0.4.10" },
   "main": "./server.js"
