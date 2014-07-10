@@ -9,11 +9,9 @@
 /* Begin PBXBuildFile section */
 		531C5683152F2F880044884C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5682152F2F880044884C /* Foundation.framework */; };
 		531C5689152F2F880044884C /* AZSocketIO.m in Sources */ = {isa = PBXBuildFile; fileRef = 531C5688152F2F880044884C /* AZSocketIO.m */; };
-		531C5691152F2F880044884C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5690152F2F880044884C /* SenTestingKit.framework */; };
 		531C5693152F2F880044884C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5692152F2F880044884C /* UIKit.framework */; };
 		531C5694152F2F880044884C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C5682152F2F880044884C /* Foundation.framework */; };
 		531C569D152F2F880044884C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 531C569B152F2F880044884C /* InfoPlist.strings */; };
-		531C56BB152F34040044884C /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C56BA152F34040044884C /* libPods-test.a */; };
 		531C56C1152F3C390044884C /* AZSocketIOTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 531C56BF152F3C390044884C /* AZSocketIOTransport.h */; };
 		531C56C2152F3C390044884C /* AZSocketIOTransportDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 531C56C0152F3C390044884C /* AZSocketIOTransportDelegate.h */; };
 		531C56C7152F3E420044884C /* AZWebsocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 531C56C5152F3E420044884C /* AZWebsocketTransport.h */; };
@@ -37,12 +35,14 @@
 		537F4DB5152F7DB000416E3C /* AZSocketIOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 537F4DB4152F7DB000416E3C /* AZSocketIOTests.m */; };
 		53F17F141562D3C400CEB2B6 /* AZxhrTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 53F17F121562D3C400CEB2B6 /* AZxhrTransport.h */; };
 		53F17F151562D3C400CEB2B6 /* AZxhrTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F17F131562D3C400CEB2B6 /* AZxhrTransport.m */; };
+		6229D759224645C4BDB8BF4D /* libPods-AZSocketIOTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 380584A6C04741D79F64B009 /* libPods-AZSocketIOTests.a */; };
 		843CFAEC1625B9B700F0F809 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFAEB1625B9B700F0F809 /* MobileCoreServices.framework */; };
 		843CFAEF1625B9CB00F0F809 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFAEE1625B9CB00F0F809 /* SystemConfiguration.framework */; };
 		847A4010153105760064C050 /* AZSocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 847A400E153105760064C050 /* AZSocketIOPacket.h */; };
 		847A4011153105760064C050 /* AZSocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A400F153105760064C050 /* AZSocketIOPacket.m */; };
 		9F125114172563B800785FDE /* AZSocketIONamespaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F125113172563B800785FDE /* AZSocketIONamespaceTests.m */; };
-		E513FA141DB74928BE0BF00C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 10B9BB21AD0C4B4AB360772D /* libPods.a */; };
+		9F8231D8196F34D8000A1AD4 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1A152F72E400416E3C /* libicucore.dylib */; };
+		ECFD4BAB600348DCA2B97394 /* libPods-AZSocketIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 45D3A71829A64E88AEE8A46C /* libPods-AZSocketIO.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,8 +63,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		10B9BB21AD0C4B4AB360772D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		22920812E19D4927BF5A0A1F /* Pods.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		380584A6C04741D79F64B009 /* libPods-AZSocketIOTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AZSocketIOTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIO.xcconfig"; path = "Pods/Pods-AZSocketIO.xcconfig"; sourceTree = "<group>"; };
+		45D3A71829A64E88AEE8A46C /* libPods-AZSocketIO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AZSocketIO.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		531C567F152F2F880044884C /* libAZSocketIO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAZSocketIO.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		531C5682152F2F880044884C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		531C5686152F2F880044884C /* AZSocketIO-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AZSocketIO-Prefix.pch"; sourceTree = "<group>"; };
@@ -75,8 +76,6 @@
 		531C5692152F2F880044884C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		531C569A152F2F880044884C /* AZSocketIOTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AZSocketIOTests-Info.plist"; sourceTree = "<group>"; };
 		531C569C152F2F880044884C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		531C56BA152F34040044884C /* libPods-test.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-test.a"; path = "Pods/build/Release-iphoneos/libPods-test.a"; sourceTree = "<group>"; };
-		531C56BC152F34E30044884C /* Pods-test.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = "<group>"; };
 		531C56BF152F3C390044884C /* AZSocketIOTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZSocketIOTransport.h; sourceTree = "<group>"; };
 		531C56C0152F3C390044884C /* AZSocketIOTransportDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZSocketIOTransportDelegate.h; sourceTree = "<group>"; };
 		531C56C5152F3E420044884C /* AZWebsocketTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZWebsocketTransport.h; sourceTree = "<group>"; };
@@ -102,6 +101,7 @@
 		843CFAEE1625B9CB00F0F809 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		847A400E153105760064C050 /* AZSocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZSocketIOPacket.h; sourceTree = "<group>"; };
 		847A400F153105760064C050 /* AZSocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZSocketIOPacket.m; sourceTree = "<group>"; };
+		8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIOTests.xcconfig"; path = "Pods/Pods-AZSocketIOTests.xcconfig"; sourceTree = "<group>"; };
 		9F125113172563B800785FDE /* AZSocketIONamespaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZSocketIONamespaceTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,7 +114,7 @@
 				537F4D1D152F72E900416E3C /* Security.framework in Frameworks */,
 				537F4D1B152F72E400416E3C /* libicucore.dylib in Frameworks */,
 				531C5683152F2F880044884C /* Foundation.framework in Frameworks */,
-				E513FA141DB74928BE0BF00C /* libPods.a in Frameworks */,
+				ECFD4BAB600348DCA2B97394 /* libPods-AZSocketIO.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,11 +122,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F8231D8196F34D8000A1AD4 /* libicucore.dylib in Frameworks */,
 				537F4D20152F72FC00416E3C /* libAZSocketIO.a in Frameworks */,
-				531C56BB152F34040044884C /* libPods-test.a in Frameworks */,
-				531C5691152F2F880044884C /* SenTestingKit.framework in Frameworks */,
 				531C5693152F2F880044884C /* UIKit.framework in Frameworks */,
 				531C5694152F2F880044884C /* Foundation.framework in Frameworks */,
+				6229D759224645C4BDB8BF4D /* libPods-AZSocketIOTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,8 +157,8 @@
 				537F4D82152F7A1100416E3C /* TestApp */,
 				531C5681152F2F880044884C /* Frameworks */,
 				531C5680152F2F880044884C /* Products */,
-				22920812E19D4927BF5A0A1F /* Pods.xcconfig */,
-				531C56BC152F34E30044884C /* Pods-test.xcconfig */,
+				445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */,
+				8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -183,9 +183,9 @@
 				531C5682152F2F880044884C /* Foundation.framework */,
 				531C5690152F2F880044884C /* SenTestingKit.framework */,
 				531C5692152F2F880044884C /* UIKit.framework */,
-				531C56BA152F34040044884C /* libPods-test.a */,
-				10B9BB21AD0C4B4AB360772D /* libPods.a */,
 				537F4D80152F7A1100416E3C /* CoreGraphics.framework */,
+				45D3A71829A64E88AEE8A46C /* libPods-AZSocketIO.a */,
+				380584A6C04741D79F64B009 /* libPods-AZSocketIOTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -298,6 +298,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 531C56A3152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIO" */;
 			buildPhases = (
+				3508D40E92094198B3374E87 /* Check Pods Manifest.lock */,
 				531C567B152F2F880044884C /* Sources */,
 				531C567C152F2F880044884C /* Frameworks */,
 				531C567D152F2F880044884C /* Headers */,
@@ -316,6 +317,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 531C56A6152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIOTests" */;
 			buildPhases = (
+				8EA1A230AA234EC1A552872B /* Check Pods Manifest.lock */,
 				531C568A152F2F880044884C /* Sources */,
 				531C568B152F2F880044884C /* Frameworks */,
 				531C568C152F2F880044884C /* Resources */,
@@ -356,7 +358,7 @@
 		531C5676152F2F880044884C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Patrick Shields";
 			};
 			buildConfigurationList = 531C5679152F2F880044884C /* Build configuration list for PBXProject "AZSocketIO" */;
@@ -399,6 +401,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3508D40E92094198B3374E87 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		48CCFFD4B61A4357B121EC5F /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -411,7 +428,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-AZSocketIOTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		531C568D152F2F880044884C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -425,6 +443,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		8EA1A230AA234EC1A552872B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -506,8 +539,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -518,10 +556,14 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -530,13 +572,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
@@ -546,13 +596,13 @@
 		};
 		531C56A4152F2F880044884C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22920812E19D4927BF5A0A1F /* Pods.xcconfig */;
+			baseConfigurationReference = 445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/AZSocketIO.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -560,13 +610,13 @@
 		};
 		531C56A5152F2F880044884C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22920812E19D4927BF5A0A1F /* Pods.xcconfig */;
+			baseConfigurationReference = 445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/AZSocketIO.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -574,20 +624,12 @@
 		};
 		531C56A7152F2F880044884C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22920812E19D4927BF5A0A1F /* Pods.xcconfig */;
+			baseConfigurationReference = 8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/xcodeproj.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = (
-					"\"$(PODS_ROOT)/Headers/Kiwi\"",
-					"\"$(PODS_ROOT)/Headers\"",
-				);
 				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -597,20 +639,12 @@
 		};
 		531C56A8152F2F880044884C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22920812E19D4927BF5A0A1F /* Pods.xcconfig */;
+			baseConfigurationReference = 8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/xcodeproj.dst;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AZSocketIO/AZSocketIO-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = (
-					"\"$(PODS_ROOT)/Headers/Kiwi\"",
-					"\"$(PODS_ROOT)/Headers\"",
-				);
 				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
