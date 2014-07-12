@@ -39,7 +39,7 @@
  
  @return The initialized transport.
  */
-- (instancetype)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate secureConnections:(BOOL)secureConnections;
+- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate secureConnections:(BOOL)secureConnections;
 
 /**
  Determines whether the transport will secure the connection.

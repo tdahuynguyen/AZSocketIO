@@ -86,10 +86,10 @@
 
 - (NSString *)description
 {
-    NSArray *pieces = [NSArray arrayWithObjects:[NSString stringWithFormat:@"<%@: %p>", NSStringFromClass([self class]), self],
-                       [NSString stringWithFormat:@"type: %d", self.type], [NSString stringWithFormat:@"id: %@", self.Id],
-                       [NSString stringWithFormat:@"endpoint: %@", self.endpoint],
-                       [NSString stringWithFormat:@"data: %@", self.data], nil];
+    NSArray *pieces = @[ [NSString stringWithFormat:@"<%@: %p>", NSStringFromClass([self class]), self],
+                         [NSString stringWithFormat:@"type: %d", self.type], [NSString stringWithFormat:@"id: %@", self.Id],
+                         [NSString stringWithFormat:@"endpoint: %@", self.endpoint],
+                         [NSString stringWithFormat:@"data: %@", self.data]];
     return [pieces componentsJoinedByString:@"\n\t"];
 }
 
