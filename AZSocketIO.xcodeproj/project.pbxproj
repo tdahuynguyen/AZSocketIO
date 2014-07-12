@@ -71,7 +71,7 @@
 		531C5686152F2F880044884C /* AZSocketIO-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AZSocketIO-Prefix.pch"; sourceTree = "<group>"; };
 		531C5687152F2F880044884C /* AZSocketIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AZSocketIO.h; sourceTree = "<group>"; };
 		531C5688152F2F880044884C /* AZSocketIO.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AZSocketIO.m; sourceTree = "<group>"; };
-		531C568F152F2F880044884C /* AZSocketIOTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AZSocketIOTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		531C568F152F2F880044884C /* AZSocketIOTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AZSocketIOTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		531C5690152F2F880044884C /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		531C5692152F2F880044884C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		531C569A152F2F880044884C /* AZSocketIOTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AZSocketIOTests-Info.plist"; sourceTree = "<group>"; };
@@ -166,7 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				531C567F152F2F880044884C /* libAZSocketIO.a */,
-				531C568F152F2F880044884C /* AZSocketIOTests.octest */,
+				531C568F152F2F880044884C /* AZSocketIOTests.xctest */,
 				537F4D7C152F7A1100416E3C /* Tester.app */,
 			);
 			name = Products;
@@ -331,8 +331,8 @@
 			);
 			name = AZSocketIOTests;
 			productName = AZSocketIOTests;
-			productReference = 531C568F152F2F880044884C /* AZSocketIOTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 531C568F152F2F880044884C /* AZSocketIOTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		537F4D7B152F7A1100416E3C /* Tester */ = {
 			isa = PBXNativeTarget;
@@ -360,6 +360,11 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Patrick Shields";
+				TargetAttributes = {
+					531C568E152F2F880044884C = {
+						TestTargetID = 531C567E152F2F880044884C;
+					};
+				};
 			};
 			buildConfigurationList = 531C5679152F2F880044884C /* Build configuration list for PBXProject "AZSocketIO" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -633,7 +638,6 @@
 				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -648,7 +652,6 @@
 				INFOPLIST_FILE = "AZSocketIOTests/AZSocketIOTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
