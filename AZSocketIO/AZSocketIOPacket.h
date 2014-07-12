@@ -21,16 +21,16 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    DISCONNECT,
-    CONNECT,
-    HEARTBEAT,
-    MESSAGE,
-    JSON_MESSAGE,
-    EVENT,
-    ACK,
-    ERROR,
-    NOOP
-} MESSAGE_TYPE;
+    AZSocketIOPacketTypeDisconnect,
+    AZSocketIOPacketTypeConnect,
+    AZSocketIOPacketTypeHeartbeat,
+    AZSocketIOPacketTypeMessage,
+    AZSocketIOPacketTypeJSONMessage,
+    AZSocketIOPacketTypeEvent,
+    AZSocketIOPacketTypeEventACK,
+    AZSocketIOPacketTypeError,
+    AZSocketIOPacketTypeNOOP
+} AZSocketIOPacketType;
 
 /**
  `AZSocketIOPacket` is an object that represents an encoded message that can be read by the socket.io server.
@@ -39,7 +39,7 @@ typedef enum {
 /**
  The type of the message.
  */
-@property(nonatomic, assign)MESSAGE_TYPE type;
+@property(nonatomic, assign) AZSocketIOPacketType type;
 
 /**
  The id of the message. This is used for ack'ing packets.

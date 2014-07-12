@@ -237,10 +237,10 @@ NSString * const AZSocketIODefaultNamespace = @"";
         }
         
         packet.data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        packet.type = JSON_MESSAGE;
+        packet.type = AZSocketIOPacketTypeJSONMessage;
     } else {
         packet.data = data;
-        packet.type = MESSAGE;
+        packet.type = AZSocketIOPacketTypeMessage;
     }
     
     if (callback != NULL) {
@@ -262,7 +262,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 - (void)sendExplicitConnectMessage
 {
     AZSocketIOPacket *connectPacket = [[AZSocketIOPacket alloc] init];
-    connectPacket.type = CONNECT;
+    connectPacket.type = AZSocketIOPacketTypeConnect;
     connectPacket.endpoint = self.endpoint;
     [self.transport send:[connectPacket encode]];
 }
@@ -280,7 +280,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 - (BOOL)emit:(NSString *)name args:(id)args error:(NSError *__autoreleasing *)error ack:(id)callback argCount:(NSUInteger)argCount
 {
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] init];
-    packet.type = EVENT;
+    packet.type = AZSocketIOPacketTypeEvent;
     
     NSDictionary *data = nil;
     
@@ -405,10 +405,10 @@ NSString * const AZSocketIODefaultNamespace = @"";
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
     AZSocketIOACKMessage *ackMessage; ACKCallback callback;
     switch (packet.type) {
-        case DISCONNECT:
+        case AZSocketIOPacketTypeDisconnect:
             [self disconnect];
             break;
-        case CONNECT:
+        case AZSocketIOPacketTypeConnect:
         {
             if (self.endpoint) {
                 NSString *receivedEndpoint = packet.endpoint;
@@ -422,15 +422,15 @@ NSString * const AZSocketIODefaultNamespace = @"";
             [self.queue setSuspended:NO];
             break;
         }
-        case HEARTBEAT:
+        case AZSocketIOPacketTypeHeartbeat:
             [self.transport send:message];
             break;
-        case MESSAGE:
+        case AZSocketIOPacketTypeMessage:
             if (self.messageReceivedBlock) {
                 self.messageReceivedBlock(packet.data);
             }
             break;
-        case JSON_MESSAGE:
+        case AZSocketIOPacketTypeJSONMessage:
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 id outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
@@ -439,7 +439,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
             });
             break;
         }
-        case EVENT:
+        case AZSocketIOPacketTypeEvent:
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 id outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]
@@ -450,7 +450,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
             });
             break;
         }
-        case ACK:
+        case AZSocketIOPacketTypeEventACK:
             ackMessage = [[AZSocketIOACKMessage alloc] initWithPacket:packet];
             callback = [self.ackCallbacks objectForKey:ackMessage.messageId];
             if (callback != NULL) {
@@ -462,7 +462,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
             }
             [self.ackCallbacks removeObjectForKey:ackMessage.messageId];
             break;
-        case ERROR:
+        case AZSocketIOPacketTypeError:
             [self disconnect];
             if (![self reconnect]) {
                 if (self.errorBlock) {
