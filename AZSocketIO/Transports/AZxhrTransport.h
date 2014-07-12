@@ -1,5 +1,5 @@
 //
-//  AZxhrTransport.h
+//  AZXHRTransport.h
 //  AZSocketIO
 //
 //  Created by Patrick Shields on 5/15/12.
@@ -20,8 +20,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AZSocketIOTransport.h"
-#import <AFNetworking.h>
 
-@interface AZxhrTransport : NSObject <AZSocketIOTransport>
-@property(nonatomic, strong)AFHTTPRequestOperationManager *client;
+@interface AZXHRTransport : NSObject <AZSocketIOTransport>
 @end

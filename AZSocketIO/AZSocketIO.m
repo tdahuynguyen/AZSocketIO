@@ -21,7 +21,7 @@
 #import "AZSocketIO.h"
 #import "AZSocketIOTransport.h"
 #import "AZWebsocketTransport.h"
-#import "AZxhrTransport.h"
+#import "AZXHRTransport.h"
 #import "AZSocketIOPacket.h"
 #import <AFNetworking.h>
 
@@ -116,7 +116,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
         
         self.transports = [NSMutableSet setWithObjects:@"websocket", @"xhr-polling", nil];
         self.transportMap = @{ @"websocket"   : [AZWebsocketTransport class],
-                               @"xhr-polling" : [AZxhrTransport class] };
+                               @"xhr-polling" : [AZXHRTransport class] };
         
         self.reconnect               = YES;
         self.reconnectionDelay       = .5;
@@ -190,7 +190,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     if ([transportType isEqualToString:@"websocket"]) {
         self.transport = [[AZWebsocketTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
     } else if ([transportType isEqualToString:@"xhr-polling"]) {
-        self.transport = [[AZxhrTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
+        self.transport = [[AZXHRTransport alloc] initWithDelegate:self secureConnections:self.secureConnections];
     } else {
         NSLog(@"Transport not implemented");
     }

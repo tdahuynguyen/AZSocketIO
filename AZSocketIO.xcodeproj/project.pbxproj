@@ -32,8 +32,8 @@
 		537F4DB2152F7AA500416E3C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1C152F72E900416E3C /* Security.framework */; };
 		537F4DB3152F7AAB00416E3C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1A152F72E400416E3C /* libicucore.dylib */; };
 		537F4DB5152F7DB000416E3C /* AZSocketIOTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 537F4DB4152F7DB000416E3C /* AZSocketIOTests.m */; };
-		53F17F141562D3C400CEB2B6 /* AZxhrTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 53F17F121562D3C400CEB2B6 /* AZxhrTransport.h */; };
-		53F17F151562D3C400CEB2B6 /* AZxhrTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F17F131562D3C400CEB2B6 /* AZxhrTransport.m */; };
+		53F17F141562D3C400CEB2B6 /* AZXHRTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 53F17F121562D3C400CEB2B6 /* AZXHRTransport.h */; };
+		53F17F151562D3C400CEB2B6 /* AZXHRTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F17F131562D3C400CEB2B6 /* AZXHRTransport.m */; };
 		6229D759224645C4BDB8BF4D /* libPods-AZSocketIOTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 380584A6C04741D79F64B009 /* libPods-AZSocketIOTests.a */; };
 		843CFAEC1625B9B700F0F809 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFAEB1625B9B700F0F809 /* MobileCoreServices.framework */; };
 		843CFAEF1625B9CB00F0F809 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 843CFAEE1625B9CB00F0F809 /* SystemConfiguration.framework */; };
@@ -94,8 +94,8 @@
 		537F4D91152F7A1100416E3C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		537F4D92152F7A1100416E3C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		537F4DB4152F7DB000416E3C /* AZSocketIOTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZSocketIOTests.m; sourceTree = "<group>"; };
-		53F17F121562D3C400CEB2B6 /* AZxhrTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZxhrTransport.h; sourceTree = "<group>"; };
-		53F17F131562D3C400CEB2B6 /* AZxhrTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZxhrTransport.m; sourceTree = "<group>"; };
+		53F17F121562D3C400CEB2B6 /* AZXHRTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZXHRTransport.h; sourceTree = "<group>"; };
+		53F17F131562D3C400CEB2B6 /* AZXHRTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZXHRTransport.m; sourceTree = "<group>"; };
 		843CFAEB1625B9B700F0F809 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		843CFAEE1625B9CB00F0F809 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		847A400E153105760064C050 /* AZSocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZSocketIOPacket.h; sourceTree = "<group>"; };
@@ -243,8 +243,8 @@
 			children = (
 				531C56C5152F3E420044884C /* AZWebsocketTransport.h */,
 				531C56C6152F3E420044884C /* AZWebsocketTransport.m */,
-				53F17F121562D3C400CEB2B6 /* AZxhrTransport.h */,
-				53F17F131562D3C400CEB2B6 /* AZxhrTransport.m */,
+				53F17F121562D3C400CEB2B6 /* AZXHRTransport.h */,
+				53F17F131562D3C400CEB2B6 /* AZXHRTransport.m */,
 			);
 			path = Transports;
 			sourceTree = "<group>";
@@ -285,7 +285,7 @@
 				531C56C2152F3C390044884C /* AZSocketIOTransportDelegate.h in Headers */,
 				531C56C7152F3E420044884C /* AZWebsocketTransport.h in Headers */,
 				847A4010153105760064C050 /* AZSocketIOPacket.h in Headers */,
-				53F17F141562D3C400CEB2B6 /* AZxhrTransport.h in Headers */,
+				53F17F141562D3C400CEB2B6 /* AZXHRTransport.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +472,7 @@
 				531C5689152F2F880044884C /* AZSocketIO.m in Sources */,
 				531C56C8152F3E420044884C /* AZWebsocketTransport.m in Sources */,
 				847A4011153105760064C050 /* AZSocketIOPacket.m in Sources */,
-				53F17F151562D3C400CEB2B6 /* AZxhrTransport.m in Sources */,
+				53F17F151562D3C400CEB2B6 /* AZXHRTransport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
