@@ -51,11 +51,16 @@
         _delegate          = delegate;
         _secureConnections = secureConnections;
         
-        NSString *protocolString = self.secureConnections ? @"wss://" : @"ws://";
-        NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/1/websocket/%@", 
-                               protocolString, [self.delegate host], @([self.delegate port]),
-                               [self.delegate sessionId]];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        NSURLRequest *request = ({
+            NSString *path = [NSString stringWithFormat:@"/socket.io/1/websocket/%@", [self.delegate sessionId]];
+            NSURLComponents *urlComponents = [[NSURLComponents alloc] init];
+            urlComponents.scheme = secureConnections ? @"wss" : @"ws";
+            urlComponents.host   = [_delegate host];
+            urlComponents.port   = @([self.delegate port]);
+            urlComponents.path   = path;
+            
+            [NSURLRequest requestWithURL:[urlComponents URL]];
+        });
         
         self.websocket = [[SRWebSocket alloc] initWithURLRequest:request];
         self.websocket.delegate = self;
