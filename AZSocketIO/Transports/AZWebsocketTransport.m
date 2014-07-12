@@ -35,14 +35,22 @@
 @synthesize connected         = _connected;
 @synthesize secureConnections = _secureConnections;
 
+#pragma mark - Init & Dealloc
+
 - (void)dealloc
 {
     [self disconnect];
 }
 
+- (instancetype)init
+{
+    return [self initWithDelegate:nil secureConnections:NO];
+}
+
 #pragma mark - AZSocketIOTransport
 
-- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate secureConnections:(BOOL)secureConnections
+- (instancetype)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate
+               secureConnections:(BOOL)secureConnections
 {
     self = [super init];
     if (self) {
