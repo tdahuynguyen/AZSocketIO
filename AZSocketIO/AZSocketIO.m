@@ -63,6 +63,13 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 @implementation AZSocketIO
 
+#pragma mark - Init & Dealloc
+
+- (instancetype)init
+{
+    return [self initWithHost:nil andPort:0 secure:NO withNamespace:nil];
+}
+
 - (id)initWithHost:(NSString *)host andPort:(uint16_t)port secure:(BOOL)secureConnections
 {
     return [self initWithHost:host
@@ -77,7 +84,6 @@ NSString * const AZSocketIODefaultNamespace = @"";
      withNamespace:(NSString *)endpoint
 {
     NSParameterAssert(host);
-    NSParameterAssert(port);
     NSParameterAssert(endpoint);
     
     self = [super init];
@@ -121,6 +127,9 @@ NSString * const AZSocketIODefaultNamespace = @"";
     return self;
 }
 
+
+#pragma mark - Accessor
+
 - (void)setReconnectionDelay:(NSTimeInterval)reconnectionDelay
 {
     _reconnectionDelay = reconnectionDelay;
@@ -128,6 +137,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 }
 
 #pragma mark connection management
+
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure
 {
     self.state = AZSocketIOStateConnecting;
