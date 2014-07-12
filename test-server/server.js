@@ -1,6 +1,5 @@
 var io = require('socket.io').listen(9000);
 
-
 io.sockets.on('connection', function (socket) {
   socket.emit('news', { hello: 'world' });
 
@@ -13,11 +12,9 @@ io.sockets.on('connection', function (socket) {
 	});
 	
 	socket.on('ackWithArg', function (data, fn) {
-    fn(data);
-  });
-
-
-	
+    		fn(data);
+    });
+  
 	socket.on('ackWithArgs', function(first, second, fn) {
 		fn(first, second);
 	});

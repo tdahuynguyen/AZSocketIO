@@ -137,10 +137,10 @@ NSString * const AZSocketIODefaultNamespace = @"";
                              failure([NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail]);
                              return;
                          }
-                         self.sessionId = [msg objectAtIndex:0];
-                         self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
-                         self.disconnectInterval = [[msg objectAtIndex:2] intValue];
-                         self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
+                         self.sessionId             = [msg objectAtIndex:0];
+                         self.heartbeatInterval     = [[msg objectAtIndex:1] intValue];
+                         self.disconnectInterval    = [[msg objectAtIndex:2] intValue];
+                         self.availableTransports   = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
                          self.currentReconnectDelay = self.reconnectionDelay;
                          [self connect];
                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -244,7 +244,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     }
     
     if (callback != NULL) {
-        packet.Id = [NSString stringWithFormat:@"%d", self.ackCount++];
+        packet.Id = [NSString stringWithFormat:@"%lu", (unsigned long)self.ackCount++];
         [self.ackCallbacks setObject:callback forKey:packet.Id];
         if (argCount > 0) {
             packet.Id = [packet.Id stringByAppendingString:@"+"];
@@ -304,7 +304,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     }
     
     packet.data = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    packet.Id = [NSString stringWithFormat:@"%d", self.ackCount++];
+    packet.Id   = [NSString stringWithFormat:@"%lu", (unsigned long)self.ackCount++];
     
     if (callback != NULL) {
         [self.ackCallbacks setObject:callback forKey:packet.Id];
@@ -442,7 +442,9 @@ NSString * const AZSocketIODefaultNamespace = @"";
         case EVENT:
         {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                id outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+                id outData = [NSJSONSerialization JSONObjectWithData:[packet.data dataUsingEncoding:NSUTF8StringEncoding]
+                                                             options:0
+                                                               error:nil];
                 [self performSelectorOnMainThread:@selector(didParseJSONEvent:)
                                        withObject:outData waitUntilDone:NO];
             });

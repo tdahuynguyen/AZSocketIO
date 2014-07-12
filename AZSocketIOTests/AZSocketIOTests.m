@@ -181,14 +181,15 @@ describe(@"The socket", ^{
         it(@"should say it's not connected", ^{
             [[theValue(socket.state) should] equal:@(AZSocketIOStateDisconnected)];
         });
-        __block NSString *sent = @"Hi", *received;
+        __block NSString *sent = @"Hi";
+        __block NSString *received;
         it(@"can still queue messages", ^{
             [[theValue([socket send:sent error:nil]) should] beFalse];
         });
         __block BOOL connected = NO;
         __block NSString *initialEvent;
         it(@"can connect again using a different transport", ^{
-            socket.transports = [NSSet setWithObject:@"xhr-polling"];
+            socket.transports = [NSMutableSet setWithObject:@"xhr-polling"];
             [socket connectWithSuccess:^{
                 connected = YES;
                 socket.eventReceivedBlock = ^(NSString *name, id _args) {
