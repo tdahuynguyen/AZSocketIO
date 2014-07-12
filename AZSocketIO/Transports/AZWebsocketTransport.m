@@ -20,46 +20,54 @@
 
 #import "AZWebsocketTransport.h"
 #import "AZSocketIOTransportDelegate.h"
+#import "SRWebSocket.h"
 
-@interface AZWebsocketTransport ()
-@property(nonatomic, weak)id<AZSocketIOTransportDelegate> delegate;
-@property(nonatomic, readwrite, assign)BOOL connected;
+
+@interface AZWebsocketTransport () <SRWebSocketDelegate>
+@property(nonatomic, strong) SRWebSocket *websocket;
+@property(nonatomic, weak) id<AZSocketIOTransportDelegate> delegate;
+@property(nonatomic, assign) BOOL connected;
 @end
 
 @implementation AZWebsocketTransport
-@synthesize secureConnections;
 
-@synthesize websocket;
-@synthesize delegate;
-@synthesize connected;
+@synthesize delegate          = _delegate;
+@synthesize connected         = _connected;
+@synthesize secureConnections = _secureConnections;
 
-#pragma mark AZSocketIOTransport
-- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)_delegate secureConnections:(BOOL)_secureConnections
+- (void)dealloc
+{
+    [self disconnect];
+}
+
+#pragma mark - AZSocketIOTransport
+
+- (id)initWithDelegate:(id<AZSocketIOTransportDelegate>)delegate secureConnections:(BOOL)secureConnections
 {
     self = [super init];
     if (self) {
-        self.connected = NO;
-        self.delegate = _delegate;
-        self.secureConnections = _secureConnections;
+        _connected = NO;
+        
+        _delegate          = delegate;
+        _secureConnections = secureConnections;
         
         NSString *protocolString = self.secureConnections ? @"wss://" : @"ws://";
         NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/1/websocket/%@", 
                                protocolString, [self.delegate host], @([self.delegate port]),
                                [self.delegate sessionId]];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+        
         self.websocket = [[SRWebSocket alloc] initWithURLRequest:request];
         self.websocket.delegate = self;
     }
     return self;
 }
-- (void)dealloc
-{
-    [self disconnect];
-}
+
 - (void)connect
 {
     [self.websocket open];
 }
+
 - (void)send:(NSString *)msg
 {
     [self.websocket send:msg];
