@@ -202,7 +202,7 @@ describe(@"The socket", ^{
             [[expectFutureValue(theValue(connected)) shouldEventually] beYes];
             [[expectFutureValue(initialEvent) shouldEventually] equal:@"news"];
         });
-        it(@"recieves a response from the queue message", ^{
+        pending_(@"recieves a response from the queue message", ^{
             [[expectFutureValue(received) shouldEventually] equal:sent];
         });
     });
