@@ -26,7 +26,7 @@ describe(@"The socket", ^{
     __block AZSocketIO *socket;
     context(@"before connection", ^{
         it(@"should be constructable", ^{
-            socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:@"9000" secure:NO];
+            socket = [[AZSocketIO alloc] initWithHost:@"localhost" andPort:9000 secure:NO];
             [socket shouldNotBeNil];
         });
         it(@"should queue messages", ^{
@@ -50,7 +50,7 @@ describe(@"The socket", ^{
             } andFailure:^(NSError *error) {
                 connected = [NSNumber numberWithBool:NO];
             }];
-            [[expectFutureValue(connected) shouldEventually] equal:[NSNumber numberWithBool:YES]];
+            [[expectFutureValue(connected) shouldEventually] equal:@(YES)];
         });
         it(@"recieves an initial event", ^{
             [[expectFutureValue(args) shouldEventually] beNonNil];

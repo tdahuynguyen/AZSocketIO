@@ -81,7 +81,7 @@
  
  @return The socket.io server port.
  */
-- (NSString*)port;
+- (uint16_t)port;
 
 /**
  Allows the transport to retrieve the current session id.

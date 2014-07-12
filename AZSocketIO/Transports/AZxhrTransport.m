@@ -104,7 +104,7 @@
         
         NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
         NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/1/xhr-polling/%@", 
-                               protocolString, [self.delegate host], [self.delegate port], 
+                               protocolString, [self.delegate host], @([self.delegate port]),
                                [self.delegate sessionId]];
         
         self.client = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];

@@ -58,11 +58,11 @@ NS_ENUM(NSUInteger, AZSocketIOError) {
 /**
  The hostname of the socket.io server
  */
-@property(nonatomic, strong, readonly)NSString *host;
+@property(nonatomic, copy, readonly)NSString *host;
 /**
  The port the socket.io server is running on
  */
-@property(nonatomic, strong, readonly)NSString *port;
+@property(nonatomic, assign, readonly)uint16_t port;
 /**
  Determines whether AZSocketIO will use secured connections such as wss or https
  */
@@ -116,7 +116,7 @@ NS_ENUM(NSUInteger, AZSocketIOError) {
  
  @return the initialized client
  */
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections;
+- (id)initWithHost:(NSString *)host andPort:(uint16_t)port secure:(BOOL)secureConnections;
 /**
  Initializes an `AZSocketIO` object with the specified host, port and namespace.
  
@@ -129,7 +129,7 @@ NS_ENUM(NSUInteger, AZSocketIOError) {
  
  @return the initialized client
  */
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections withNamespace:(NSString *)endpoint;
+- (id)initWithHost:(NSString *)host andPort:(uint16_t)port secure:(BOOL)secureConnections withNamespace:(NSString *)endpoint;
 /**
  Connects to the socket.io server.
  

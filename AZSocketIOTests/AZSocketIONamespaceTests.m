@@ -19,7 +19,7 @@ describe(@"The socket", ^{
     context(@"when created", ^{
         it(@"should be constructable", ^{
             socket = [[AZSocketIO alloc] initWithHost:@"localhost"
-                                              andPort:@"9000"
+                                              andPort:9000
                                                secure:NO
                                         withNamespace:kNamespaceName];
             [socket shouldNotBeNil];

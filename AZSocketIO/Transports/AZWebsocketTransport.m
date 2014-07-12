@@ -44,7 +44,7 @@
         
         NSString *protocolString = self.secureConnections ? @"wss://" : @"ws://";
         NSString *urlString = [NSString stringWithFormat:@"%@%@:%@/socket.io/1/websocket/%@", 
-                               protocolString, [self.delegate host], [self.delegate port], 
+                               protocolString, [self.delegate host], @([self.delegate port]),
                                [self.delegate sessionId]];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
         self.websocket = [[SRWebSocket alloc] initWithURLRequest:request];

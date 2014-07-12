@@ -30,8 +30,10 @@
 NSString * const AZSocketIODefaultNamespace = @"";
 
 @interface AZSocketIO ()
-@property(nonatomic, strong, readwrite)NSString *host;
-@property(nonatomic, strong, readwrite)NSString *port;
+
+@property(nonatomic, copy, readwrite) NSString *host;
+@property(nonatomic, assign, readwrite) uint16_t port;
+
 @property(nonatomic, assign, readwrite)BOOL secureConnections;
 @property(nonatomic, copy, readwrite)NSString *endpoint;
 
@@ -61,7 +63,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 @implementation AZSocketIO
 
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections
+- (id)initWithHost:(NSString *)host andPort:(uint16_t)port secure:(BOOL)secureConnections
 {
     return [self initWithHost:host
                       andPort:port
@@ -69,7 +71,10 @@ NSString * const AZSocketIODefaultNamespace = @"";
                 withNamespace:AZSocketIODefaultNamespace];
 }
 
-- (id)initWithHost:(NSString *)host andPort:(NSString *)port secure:(BOOL)secureConnections withNamespace:(NSString *)endpoint
+- (id)initWithHost:(NSString *)host
+           andPort:(uint16_t)port
+            secure:(BOOL)secureConnections
+     withNamespace:(NSString *)endpoint
 {
     NSParameterAssert(host);
     NSParameterAssert(port);
@@ -77,19 +82,21 @@ NSString * const AZSocketIODefaultNamespace = @"";
     
     self = [super init];
     if (self) {
-        self.host = host;
-        self.port = port;
-        self.secureConnections = secureConnections;
-        self.endpoint = endpoint;
+        _host              = [host copy];
+        _port              = port;
+        _secureConnections = secureConnections;
+        _endpoint          = endpoint;
         
-        NSString *protocolString = self.secureConnections ? @"https://" : @"http://";
-        NSString *urlString = [NSString stringWithFormat:@"%@%@:%@", protocolString,
-                               self.host, self.port];
-        
-        self.httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
-//        NSMutableSet* types = [NSMutableSet setWithSet:self.httpClient.responseSerializer.acceptableContentTypes];
-//        [types addObject:@"text/plain"];
-//        self.httpClient.responseSerializer.acceptableContentTypes = types;
+    
+        NSURL *serverURL = ({
+            NSURLComponents *urlComponent = [[NSURLComponents alloc] init];
+            urlComponent.scheme = secureConnections ? @"https" : @"http";
+            urlComponent.host   = host;
+            urlComponent.port   = @(port);
+            [urlComponent URL];
+        });
+
+        self.httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:serverURL];
         self.httpClient.requestSerializer.stringEncoding = NSUTF8StringEncoding;
         self.httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
         self.httpClient.responseSerializer.stringEncoding = NSUTF8StringEncoding;
@@ -102,11 +109,12 @@ NSString * const AZSocketIODefaultNamespace = @"";
         [self.queue setSuspended:YES];
         
         self.transports = [NSMutableSet setWithObjects:@"websocket", @"xhr-polling", nil];
-        self.transportMap = @{ @"websocket" : [AZWebsocketTransport class], @"xhr-polling" : [AZxhrTransport class] };
+        self.transportMap = @{ @"websocket"   : [AZWebsocketTransport class],
+                               @"xhr-polling" : [AZxhrTransport class] };
         
-        self.reconnect = YES;
-        self.reconnectionDelay = .5;
-        self.reconnectionLimit = MAXFLOAT;
+        self.reconnect               = YES;
+        self.reconnectionDelay       = .5;
+        self.reconnectionLimit       = MAXFLOAT;
         self.maxReconnectionAttempts = 10;
         self.state = AZSocketIOStateDisconnected;
     }

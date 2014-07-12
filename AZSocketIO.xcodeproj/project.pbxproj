@@ -196,8 +196,8 @@
 				847A400E153105760064C050 /* AZSocketIOPacket.h */,
 				847A400F153105760064C050 /* AZSocketIOPacket.m */,
 				531C56BE152F3C0B0044884C /* Protocols */,
-				531C5685152F2F880044884C /* Supporting Files */,
 				531C56C4152F3E160044884C /* Transports */,
+				531C5685152F2F880044884C /* Supporting Files */,
 			);
 			path = AZSocketIO;
 			sourceTree = "<group>";
