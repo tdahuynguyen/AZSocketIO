@@ -16,7 +16,6 @@
 		531C56C2152F3C390044884C /* AZSocketIOTransportDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 531C56C0152F3C390044884C /* AZSocketIOTransportDelegate.h */; };
 		531C56C7152F3E420044884C /* AZWebsocketTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 531C56C5152F3E420044884C /* AZWebsocketTransport.h */; };
 		531C56C8152F3E420044884C /* AZWebsocketTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 531C56C6152F3E420044884C /* AZWebsocketTransport.m */; };
-		537F4D1B152F72E400416E3C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1A152F72E400416E3C /* libicucore.dylib */; };
 		537F4D1D152F72E900416E3C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1C152F72E900416E3C /* Security.framework */; };
 		537F4D1F152F72ED00416E3C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537F4D1E152F72ED00416E3C /* CFNetwork.framework */; };
 		537F4D20152F72FC00416E3C /* libAZSocketIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 531C567F152F2F880044884C /* libAZSocketIO.a */; };
@@ -112,7 +111,6 @@
 			files = (
 				537F4D1F152F72ED00416E3C /* CFNetwork.framework in Frameworks */,
 				537F4D1D152F72E900416E3C /* Security.framework in Frameworks */,
-				537F4D1B152F72E400416E3C /* libicucore.dylib in Frameworks */,
 				531C5683152F2F880044884C /* Foundation.framework in Frameworks */,
 				ECFD4BAB600348DCA2B97394 /* libPods-AZSocketIO.a in Frameworks */,
 			);
