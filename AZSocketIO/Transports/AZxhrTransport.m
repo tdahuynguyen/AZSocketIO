@@ -22,6 +22,25 @@
 #import <AFNetworking.h>
 #import "AZSocketIOTransportDelegate.h"
 
+#pragma mark - NSData + UTF8String
+
+@interface NSData (UTF8String)
+- (NSString *)az_UTF8String;
+@end
+
+@implementation NSData (UTF8String)
+
+- (NSString *)az_UTF8String
+{
+    return [[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding];
+}
+
+@end
+
+
+#pragma mark - AZXHRTransport
+
+
 @interface AZXHRTransport ()
 @property(nonatomic, strong) AFHTTPRequestOperationManager *client;
 @property(nonatomic, weak) id<AZSocketIOTransportDelegate> delegate;
@@ -83,8 +102,8 @@
                      [delegate transportDidOpenConnection:self];
                  }
                  
-                 NSString *responseString = [self stringFromData:responseObject];
-                 NSArray *messages = [responseString componentsSeparatedByString:@"\ufffd"];
+                 NSString *responseString = [responseObject az_UTF8String];
+                 NSArray *messages        = [responseString componentsSeparatedByString:@"\ufffd"];
                  if ([messages count] > 0) {
                      for (NSString *message in messages) {
                          [delegate transport:self didReceiveMessage:message];
@@ -127,11 +146,7 @@
 
 - (void)send:(NSString*)msg
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.client.baseURL];
-    request.HTTPMethod = @"POST";
-    [request setHTTPBody:[msg dataUsingEncoding:NSUTF8StringEncoding]];
-    [request setValue:@"text/plain; charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"Keep-Alive" forHTTPHeaderField:@"Connection"];
+    NSURLRequest *request = [self URLRequestForMessage:msg];
     
     [self.client HTTPRequestOperationWithRequest:request
                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -146,9 +161,19 @@
                                          }];
 }
 
-- (NSString *)stringFromData:(NSData *)data
+#pragma mark - Private
+
+- (NSURLRequest *)URLRequestForMessage:(NSString *)message
 {
-    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSData *bodyData = [message dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.client.baseURL];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:bodyData];
+    [request setValue:@"text/plain; charset=UTF-8"  forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"Keep-Alive"                 forHTTPHeaderField:@"Connection"];
+    
+    return request;
 }
 
 @end
