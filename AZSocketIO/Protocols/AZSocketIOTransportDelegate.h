@@ -20,6 +20,8 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol AZSocketIOTransport;
+
 /**
  The `AZSocketIOTransportDelegate` protocol allows the adopting delegate to respond to messages from an `AZSocketIOTransport`.
  */
@@ -33,17 +35,17 @@
 /**
  Tells the delegate that the transport has opened.
  */
-- (void)didOpen;
+- (void)transportDidOpenConnection:(id<AZSocketIOTransport>)transport;
 
 /**
  Tells the delegate that the transport has closed.
  */
-- (void)didClose;
+- (void)transportDidCloseConnection:(id<AZSocketIOTransport>)transport;
 
 /**
  Tells the delegate that the transport sent a message.
  */
-- (void)didSendMessage;
+- (void)transportDidSendMessage:(id <AZSocketIOTransport>)transport;
 
 @required
 
@@ -52,10 +54,10 @@
  
  @param error An instance of `NSError` that describes the problem.
  */
-- (void)didFailWithError:(NSError*)error;
+- (void)transport:(id<AZSocketIOTransport>)transport didFailWithError:(NSError *)error;
 
 ///--------------------------------------------
-/// @name Recieving Messages From the Transport
+/// @name Receiving Messages From the Transport
 ///--------------------------------------------
 
 /**
@@ -63,7 +65,7 @@
  
  @param message An `NSString` containing the message data.
  */
-- (void)didReceiveMessage:(NSString*)message;
+- (void)transport:(id <AZSocketIOTransport>)transport didReceiveMessage:(NSString *)message;
 
 ///---------------------------------------------------------
 /// @name Supplying Connection Information From the Delegate

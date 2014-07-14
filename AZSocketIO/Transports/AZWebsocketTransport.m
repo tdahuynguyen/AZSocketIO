@@ -32,7 +32,6 @@
 @implementation AZWebsocketTransport
 
 @synthesize delegate          = _delegate;
-@synthesize connected         = _connected;
 @synthesize secureConnections = _secureConnections;
 
 #pragma mark - Init & Dealloc
@@ -84,10 +83,12 @@
 - (void)send:(NSString *)msg
 {
     [self.websocket send:msg];
-    if ([self.delegate respondsToSelector:@selector(didSendMessage)]) {
-        [self.delegate didSendMessage];
+    id<AZSocketIOTransportDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(transportDidSendMessage:)]) {
+        [delegate transportDidSendMessage:self];
     }
 }
+
 - (void)disconnect
 {
     self.websocket.delegate = nil;
@@ -98,30 +99,37 @@
 }
 
 #pragma mark SRWebSocketDelegate
+
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(NSString *)message
 {
-    [self.delegate didReceiveMessage:message];
+    [self.delegate transport:self didReceiveMessage:message];
 }
+
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
     self.connected = YES;
-    if ([self.delegate respondsToSelector:@selector(didOpen)]) {
-        [self.delegate didOpen];
+    id<AZSocketIOTransportDelegate> delegate = self.delegate;
+    if ([delegate respondsToSelector:@selector(transportDidOpenConnection:)]) {
+        [delegate transportDidOpenConnection:self];
     }
 }
+
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     if (!self.connected || wasClean) {
-        if ([self.delegate respondsToSelector:@selector(didClose)]) {
-            [self.delegate didClose];
+        id<AZSocketIOTransportDelegate> delegate = self.delegate;
+        if ([delegate respondsToSelector:@selector(transportDidCloseConnection:)]) {
+            [delegate transportDidCloseConnection:self];
         }
     } else { // Socket disconnections can be errors, but with socket.io was clean always seems to be false, so we'll check on our own
         [self webSocket:webSocket didFailWithError:nil];
     }
 }
+
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     self.connected = NO;
-    [self.delegate didFailWithError:error];
+    [self.delegate transport:self didFailWithError:error];
 }
+
 @end

@@ -28,10 +28,11 @@
 @property(nonatomic, assign) BOOL connected;
 @end
 
+
 @implementation AZXHRTransport
+
 @synthesize delegate          = _delegate;
 @synthesize secureConnections = _secureConnections;
-
 
 #pragma mark - Init & Dealloc
 
@@ -75,17 +76,21 @@
           parameters:nil
              success:^(AFHTTPRequestOperation *operation, id responseObject) {
                  self.connected = YES;
-                 if ([self.delegate respondsToSelector:@selector(didOpen)]) {
-                     [self.delegate didOpen];
+                 
+                 id<AZSocketIOTransportDelegate> delegate = self.delegate;
+                 
+                 if ([delegate respondsToSelector:@selector(transportDidOpenConnection:)]) {
+                     [delegate transportDidOpenConnection:self];
                  }
+                 
                  NSString *responseString = [self stringFromData:responseObject];
                  NSArray *messages = [responseString componentsSeparatedByString:@"\ufffd"];
                  if ([messages count] > 0) {
                      for (NSString *message in messages) {
-                         [self.delegate didReceiveMessage:message];
+                         [delegate transport:self didReceiveMessage:message];
                      }
                  } else {
-                     [self.delegate didReceiveMessage:responseString];
+                     [delegate transport:self didReceiveMessage:responseString];
                  }
                  
                  if (self.connected) {
@@ -93,13 +98,17 @@
                  }
              }
              failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                 [self.delegate didFailWithError:error];
-                 if ([self.delegate respondsToSelector:@selector(didClose)]) {
-                     [self.delegate didClose];
+                 id<AZSocketIOTransportDelegate> delegate = self.delegate;
+                 
+                 [delegate transport:self didFailWithError:error];
+                 
+                 if ([delegate respondsToSelector:@selector(transportDidCloseConnection:)]) {
+                     [delegate transportDidCloseConnection:nil];
                  }
              }];
 
 }
+
 - (void)disconnect
 {
     [self.client.operationQueue cancelAllOperations];
@@ -109,10 +118,13 @@
              failure:nil];
     
     self.connected = NO;
-    if ([self.delegate respondsToSelector:@selector(didClose)]) {
-        [self.delegate didClose];
+    id<AZSocketIOTransportDelegate> delegate = self.delegate;
+    
+    if ([delegate respondsToSelector:@selector(transportDidCloseConnection:)]) {
+        [delegate transportDidCloseConnection:self];
     }
 }
+
 - (void)send:(NSString*)msg
 {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.client.baseURL];
@@ -123,12 +135,14 @@
     
     [self.client HTTPRequestOperationWithRequest:request
                                          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                             if ([self.delegate respondsToSelector:@selector(didSendMessage)]) {
-                                                 [self.delegate didSendMessage];
+                                             id<AZSocketIOTransportDelegate> delegate = self.delegate;
+                                             if ([delegate respondsToSelector:@selector(transportDidSendMessage:)]) {
+                                                 [delegate transportDidSendMessage:self];
                                              }
                                          }
                                          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                             [self.delegate didFailWithError:error];
+                                             id<AZSocketIOTransportDelegate> delegate = self.delegate;
+                                             [delegate transport:self didFailWithError:error];
                                          }];
 }
 
@@ -136,4 +150,5 @@
 {
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
+
 @end

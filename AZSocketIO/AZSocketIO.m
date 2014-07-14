@@ -417,8 +417,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 #pragma mark AZSocketIOTransportDelegate
 
-- (void)didReceiveMessage:(NSString *)message
-{
+- (void)transport:(id <AZSocketIOTransport>)transport didReceiveMessage:(NSString *)message {
     [self startHeartbeatTimeout];
     AZSocketIOPacket *packet = [[AZSocketIOPacket alloc] initWithString:message];
     AZSocketIOACKMessage *ackMessage; ACKCallback callback;
@@ -496,14 +495,12 @@ NSString * const AZSocketIODefaultNamespace = @"";
     }
 }
 
-- (void)didOpen
-{
+- (void)transportDidOpenConnection:(id <AZSocketIOTransport>)transport {
     self.state = AZSocketIOStateConnected;
     self.connectionAttempts = 0;
 }
 
-- (void)didClose
-{
+- (void)transportDidCloseConnection:(id <AZSocketIOTransport>)transport {
     self.state = AZSocketIOStateDisconnected;
     [self.queue setSuspended:YES];
     if (self.disconnectedBlock) {
@@ -511,8 +508,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     }
 }
 
-- (void)didFailWithError:(NSError *)error
-{
+- (void)transport:(id <AZSocketIOTransport>)transport didFailWithError:(NSError *)error {
     self.state = AZSocketIOStateDisconnected;
     [self.queue setSuspended:YES];
     if (![self reconnect] && self.errorBlock) {
