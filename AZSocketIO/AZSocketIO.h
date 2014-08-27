@@ -137,6 +137,16 @@ NS_ENUM(NSUInteger, AZSocketIOError) {
  @param failure A block object that will be executed when an error is reported by the socket.io server or the connection becomes unusable.
  */
 - (void)connectWithSuccess:(void (^)())success andFailure:(void (^)(NSError *error))failure;
+
+/**
+ Connects to the socket.io server.
+ 
+ @param success A block object that will be executed after the completion of handshake.
+ @param failure A block object that will be executed when an error is reported by the socket.io server or the connection becomes unusable.
+ @param data A dictionary with additional data for the handshake
+ */
+- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure withData:(NSDictionary*)data;
+
 /**
  Disconnects from the socket.io server
  */

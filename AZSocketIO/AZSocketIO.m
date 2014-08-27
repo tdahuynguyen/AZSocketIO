@@ -122,10 +122,32 @@ NSString * const AZSocketIODefaultNamespace = @"";
 #pragma mark connection management
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure
 {
+    [self connectWithSuccess:success andFailure:failure withData:nil];
+}
+
+- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure withData:(NSDictionary*)data
+{
     self.state = AZSocketIOStateConnecting;
     self.connectionBlock = success;
     self.errorBlock = failure;
-    NSString *urlString = [NSString stringWithFormat:@"socket.io/%@", PROTOCOL_VERSION];
+    
+    // generate the query string
+    NSMutableString *query = [[NSMutableString alloc] initWithString:@""];
+    
+    if ( data != nil ) {
+        [data enumerateKeysAndObjectsUsingBlock: ^(id key, id value, BOOL *stop) {
+            
+            if (query.length == 0)
+                [query appendFormat:@"?%@=%@", key, value];
+            else
+                [query appendFormat:@"&%@=%@", key, value];
+        }];
+    }
+
+    // generate the url string
+    NSString *urlString = [NSString stringWithFormat:@"socket.io/%@%@", PROTOCOL_VERSION, query];
+    
+    // perform the handshake
     [self.httpClient GET:urlString
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
