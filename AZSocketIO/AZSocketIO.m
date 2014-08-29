@@ -57,6 +57,8 @@ NSString * const AZSocketIODefaultNamespace = @"";
 @property(nonatomic, assign)NSTimeInterval currentReconnectDelay;
 
 @property(nonatomic, assign, readwrite)AZSocketIOState state;
+
+@property(nonatomic, strong, readwrite)NSDictionary* handshakeData;
 @end
 
 @implementation AZSocketIO
@@ -130,6 +132,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
     self.state = AZSocketIOStateConnecting;
     self.connectionBlock = success;
     self.errorBlock = failure;
+    self.handshakeData = data;
     
     // generate the query string
     NSMutableString *query = [[NSMutableString alloc] initWithString:@""];
@@ -221,11 +224,12 @@ NSString * const AZSocketIODefaultNamespace = @"";
         } else if (self.connectionAttempts < self.maxReconnectionAttempts) {
             if (self.currentReconnectDelay < self.reconnectionLimit) {
                 NSLog(@"Reconnecting after %f", self.currentReconnectDelay);
-                NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:)]];
+                NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:withData:)]];
                 connectionCallable.target = self;
-                connectionCallable.selector = @selector(connectWithSuccess:andFailure:);
+                connectionCallable.selector = @selector(connectWithSuccess:andFailure:withData:);
                 [connectionCallable setArgument:&_connectionBlock atIndex:2];
                 [connectionCallable setArgument:&_errorBlock atIndex:3];
+                [connectionCallable setArgument:&_handshakeData atIndex:4];
                 [NSTimer scheduledTimerWithTimeInterval:self.currentReconnectDelay invocation:connectionCallable repeats:NO];
                 
                 self.currentReconnectDelay *= 2;
