@@ -206,5 +206,17 @@ describe(@"The socket", ^{
             [[expectFutureValue(received) shouldEventually] equal:sent];
         });
     });
+    context(@"when connecting with unavailable transports", ^{
+        it(@"should say it's not connected", ^{
+            __block BOOL failed = NO;
+            socket.transports = [NSMutableSet setWithObject:@"some-unsupported-transport"];
+            [socket connectWithSuccess:^{} andFailure:^(NSError *error) {
+                failed = YES;
+            }];
+            
+            [[expectFutureValue(theValue(failed)) shouldEventually] beYes];
+            [[expectFutureValue(theValue(socket.state)) shouldEventually] equal:theValue(AZSocketIOStateDisconnected)];
+        });
+    });
 });
 SPEC_END
