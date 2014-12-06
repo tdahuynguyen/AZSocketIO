@@ -57,6 +57,8 @@ NSString * const AZSocketIODefaultNamespace = @"";
 @property(nonatomic, assign)NSTimeInterval currentReconnectDelay;
 
 @property(nonatomic, assign, readwrite)AZSocketIOState state;
+
+@property(nonatomic, strong, readwrite)NSDictionary* handshakeData;
 @end
 
 @implementation AZSocketIO
@@ -122,10 +124,33 @@ NSString * const AZSocketIODefaultNamespace = @"";
 #pragma mark connection management
 - (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure
 {
+    [self connectWithSuccess:success andFailure:failure withData:nil];
+}
+
+- (void)connectWithSuccess:(ConnectedBlock)success andFailure:(ErrorBlock)failure withData:(NSDictionary*)data
+{
     self.state = AZSocketIOStateConnecting;
     self.connectionBlock = success;
     self.errorBlock = failure;
-    NSString *urlString = [NSString stringWithFormat:@"socket.io/%@", PROTOCOL_VERSION];
+    self.handshakeData = data;
+    
+    // generate the query string
+    NSMutableString *query = [[NSMutableString alloc] initWithString:@""];
+    
+    if ( data != nil ) {
+        [data enumerateKeysAndObjectsUsingBlock: ^(id key, id value, BOOL *stop) {
+            
+            if (query.length == 0)
+                [query appendFormat:@"?%@=%@", key, value];
+            else
+                [query appendFormat:@"&%@=%@", key, value];
+        }];
+    }
+
+    // generate the url string
+    NSString *urlString = [NSString stringWithFormat:@"socket.io/%@%@", PROTOCOL_VERSION, query];
+    
+    // perform the handshake
     [self.httpClient GET:urlString
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -199,11 +224,12 @@ NSString * const AZSocketIODefaultNamespace = @"";
         } else if (self.connectionAttempts < self.maxReconnectionAttempts) {
             if (self.currentReconnectDelay < self.reconnectionLimit) {
                 NSLog(@"Reconnecting after %f", self.currentReconnectDelay);
-                NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:)]];
+                NSInvocation *connectionCallable = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(connectWithSuccess:andFailure:withData:)]];
                 connectionCallable.target = self;
-                connectionCallable.selector = @selector(connectWithSuccess:andFailure:);
+                connectionCallable.selector = @selector(connectWithSuccess:andFailure:withData:);
                 [connectionCallable setArgument:&_connectionBlock atIndex:2];
                 [connectionCallable setArgument:&_errorBlock atIndex:3];
+                [connectionCallable setArgument:&_handshakeData atIndex:4];
                 [NSTimer scheduledTimerWithTimeInterval:self.currentReconnectDelay invocation:connectionCallable repeats:NO];
                 
                 self.currentReconnectDelay *= 2;
