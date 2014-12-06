@@ -183,6 +183,8 @@ NSString * const AZSocketIODefaultNamespace = @"";
     [errorDetail setValue:@"None of the available transports are recognized by this server" forKey:NSLocalizedDescriptionKey];
     NSError *error = [NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail];
     self.errorBlock(error);
+    
+    self.state = AZSocketIOStateDisconnected;
 }
 
 - (void)connectViaTransport:(NSString*)transportType 
