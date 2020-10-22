@@ -39,7 +39,7 @@ NSString * const AZSocketIODefaultNamespace = @"";
 
 @property(nonatomic, strong)ConnectedBlock connectionBlock;
 
-@property(nonatomic, strong)AFHTTPRequestOperationManager *httpClient;
+@property(nonatomic, strong)AFHTTPSessionManager *httpClient;
 @property(nonatomic, strong)NSDictionary *transportMap;
 
 @property(nonatomic, strong)NSMutableDictionary *ackCallbacks;
@@ -88,13 +88,10 @@ NSString * const AZSocketIODefaultNamespace = @"";
         NSString *urlString = [NSString stringWithFormat:@"%@%@:%@", protocolString,
                                self.host, self.port];
         
-        self.httpClient = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
-//        NSMutableSet* types = [NSMutableSet setWithSet:self.httpClient.responseSerializer.acceptableContentTypes];
-//        [types addObject:@"text/plain"];
-//        self.httpClient.responseSerializer.acceptableContentTypes = types;
+        self.httpClient = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
         self.httpClient.requestSerializer.stringEncoding = NSUTF8StringEncoding;
         self.httpClient.responseSerializer = [AFHTTPResponseSerializer serializer];
-        self.httpClient.responseSerializer.stringEncoding = NSUTF8StringEncoding;
+        //self.httpClient.responseSerializer.stringEncoding = NSUTF8StringEncoding;
         
         self.ackCallbacks = [NSMutableDictionary dictionary];
         self.ackCount = 0;
@@ -152,28 +149,30 @@ NSString * const AZSocketIODefaultNamespace = @"";
     
     // perform the handshake
     [self.httpClient GET:urlString
-                  parameters:nil
-                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                         NSString *response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-                         NSArray *msg = [response componentsSeparatedByString:@":"];
-                         if ([msg count] < 4) {
-                             NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
-                             [errorDetail setValue:@"Server handshake message could not be decoded" forKey:NSLocalizedDescriptionKey];
-                             failure([NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail]);
-                             return;
-                         }
-                         self.sessionId = [msg objectAtIndex:0];
-                         self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
-                         self.disconnectInterval = [[msg objectAtIndex:2] intValue];
-                         self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
-                         self.currentReconnectDelay = self.reconnectionDelay;
-                         [self connect];
-                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                         self.state = AZSocketIOStateDisconnected;
-                         if (![self reconnect]) {
-                             failure(error);
-                         }
-                     }];
+              parameters:nil
+                 headers:nil
+                progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSArray *msg = [response componentsSeparatedByString:@":"];
+        if ([msg count] < 4) {
+            NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
+            [errorDetail setValue:@"Server handshake message could not be decoded" forKey:NSLocalizedDescriptionKey];
+            failure([NSError errorWithDomain:AZDOMAIN code:AZSocketIOErrorConnection userInfo:errorDetail]);
+            return;
+        }
+        self.sessionId = [msg objectAtIndex:0];
+        self.heartbeatInterval = [[msg objectAtIndex:1] intValue];
+        self.disconnectInterval = [[msg objectAtIndex:2] intValue];
+        self.availableTransports = [[msg objectAtIndex:3] componentsSeparatedByString:@","];
+        self.currentReconnectDelay = self.reconnectionDelay;
+        [self connect];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self.state = AZSocketIOStateDisconnected;
+        if (![self reconnect]) {
+            failure(error);
+        }
+    }];
+   
 }
 
 - (void)connect

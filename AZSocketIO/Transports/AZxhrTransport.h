@@ -23,5 +23,5 @@
 #import <AFNetworking.h>
 
 @interface AZxhrTransport : NSObject <AZSocketIOTransport>
-@property(nonatomic, strong)AFHTTPRequestOperationManager *client;
+@property(nonatomic, strong)AFHTTPSessionManager *client;
 @end

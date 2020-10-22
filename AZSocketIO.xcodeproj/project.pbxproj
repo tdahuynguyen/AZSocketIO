@@ -63,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0AFC2339ADD52E032F7542E8 /* Pods-AZSocketIO.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIO.debug.xcconfig"; path = "Target Support Files/Pods-AZSocketIO/Pods-AZSocketIO.debug.xcconfig"; sourceTree = "<group>"; };
+		177DD4A0CB2822722C8C28FD /* Pods-AZSocketIOTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIOTests.release.xcconfig"; path = "Target Support Files/Pods-AZSocketIOTests/Pods-AZSocketIOTests.release.xcconfig"; sourceTree = "<group>"; };
 		380584A6C04741D79F64B009 /* libPods-AZSocketIOTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AZSocketIOTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIO.xcconfig"; path = "Pods/Pods-AZSocketIO.xcconfig"; sourceTree = "<group>"; };
 		45D3A71829A64E88AEE8A46C /* libPods-AZSocketIO.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AZSocketIO.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,7 +104,9 @@
 		847A400E153105760064C050 /* AZSocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AZSocketIOPacket.h; sourceTree = "<group>"; };
 		847A400F153105760064C050 /* AZSocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZSocketIOPacket.m; sourceTree = "<group>"; };
 		8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIOTests.xcconfig"; path = "Pods/Pods-AZSocketIOTests.xcconfig"; sourceTree = "<group>"; };
+		8F9C9C6E92AD9F50061EB30D /* Pods-AZSocketIOTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIOTests.debug.xcconfig"; path = "Target Support Files/Pods-AZSocketIOTests/Pods-AZSocketIOTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9F125113172563B800785FDE /* AZSocketIONamespaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AZSocketIONamespaceTests.m; sourceTree = "<group>"; };
+		B9E538A54AC6BCE1DB2782CF /* Pods-AZSocketIO.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AZSocketIO.release.xcconfig"; path = "Target Support Files/Pods-AZSocketIO/Pods-AZSocketIO.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F0292F0A159A6DC2AE96634 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0AFC2339ADD52E032F7542E8 /* Pods-AZSocketIO.debug.xcconfig */,
+				B9E538A54AC6BCE1DB2782CF /* Pods-AZSocketIO.release.xcconfig */,
+				8F9C9C6E92AD9F50061EB30D /* Pods-AZSocketIOTests.debug.xcconfig */,
+				177DD4A0CB2822722C8C28FD /* Pods-AZSocketIOTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		531C5674152F2F880044884C = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +175,7 @@
 				531C5680152F2F880044884C /* Products */,
 				445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */,
 				8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */,
+				4F0292F0A159A6DC2AE96634 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -298,11 +315,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 531C56A3152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIO" */;
 			buildPhases = (
+				E617EDD3613D86F7EACAB923 /* [CP] Check Pods Manifest.lock */,
 				3508D40E92094198B3374E87 /* Check Pods Manifest.lock */,
 				531C567B152F2F880044884C /* Sources */,
 				531C567C152F2F880044884C /* Frameworks */,
 				531C567D152F2F880044884C /* Headers */,
-				48CCFFD4B61A4357B121EC5F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -317,12 +334,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 531C56A6152F2F880044884C /* Build configuration list for PBXNativeTarget "AZSocketIOTests" */;
 			buildPhases = (
+				F36AAD826D3B47CBDCE8068C /* [CP] Check Pods Manifest.lock */,
 				8EA1A230AA234EC1A552872B /* Check Pods Manifest.lock */,
 				531C568A152F2F880044884C /* Sources */,
 				531C568B152F2F880044884C /* Frameworks */,
 				531C568C152F2F880044884C /* Resources */,
 				531C568D152F2F880044884C /* ShellScript */,
-				48CCFFD4B61A4357B121EC5F /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -421,21 +438,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		48CCFFD4B61A4357B121EC5F /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-AZSocketIOTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		531C568D152F2F880044884C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -462,6 +464,50 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E617EDD3613D86F7EACAB923 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AZSocketIO-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F36AAD826D3B47CBDCE8068C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AZSocketIOTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -601,7 +647,7 @@
 		};
 		531C56A4152F2F880044884C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */;
+			baseConfigurationReference = 0AFC2339ADD52E032F7542E8 /* Pods-AZSocketIO.debug.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/AZSocketIO.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -615,7 +661,7 @@
 		};
 		531C56A5152F2F880044884C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 445973B6CC31433598C8C0CA /* Pods-AZSocketIO.xcconfig */;
+			baseConfigurationReference = B9E538A54AC6BCE1DB2782CF /* Pods-AZSocketIO.release.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/AZSocketIO.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -629,7 +675,7 @@
 		};
 		531C56A7152F2F880044884C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */;
+			baseConfigurationReference = 8F9C9C6E92AD9F50061EB30D /* Pods-AZSocketIOTests.debug.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/xcodeproj.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -643,7 +689,7 @@
 		};
 		531C56A8152F2F880044884C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8EF9098DBAAF45D2834E2AC5 /* Pods-AZSocketIOTests.xcconfig */;
+			baseConfigurationReference = 177DD4A0CB2822722C8C28FD /* Pods-AZSocketIOTests.release.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/xcodeproj.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
