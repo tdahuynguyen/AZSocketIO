@@ -19,7 +19,7 @@
 //
 
 #import "AZxhrTransport.h"
-#import <AFNetworking.h>
+#import "AFHTTPSessionManager.h"
 #import "AZSocketIOTransportDelegate.h"
 
 @interface AZxhrTransport ()

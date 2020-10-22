@@ -23,7 +23,7 @@
 #import "AZWebsocketTransport.h"
 #import "AZxhrTransport.h"
 #import "AZSocketIOPacket.h"
-#import <AFNetworking.h>
+#import "AFHTTPSessionManager.h"
 
 #define PROTOCOL_VERSION @"1"
 

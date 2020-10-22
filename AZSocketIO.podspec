@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.dependency 'SocketRocket', '~> 0.x'
   s.dependency 'AFNetworking', '~> 4.0'
   s.requires_arc = true
-  s.platform = :ios, 6.0
+  s.platform = :ios, 9.0
   s.prefix_header_contents = <<-EOS
 #import <Availability.h>
 
